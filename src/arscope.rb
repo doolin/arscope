@@ -130,6 +130,12 @@ o4.invoice = i4
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
 
+RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+end
+
 describe Invoice do
 
   let(:invoice) { Invoice.new }
@@ -144,7 +150,11 @@ describe Invoice do
     Invoice.methods.should  include :foo
   end
 
-  it "does not allow duplicate scope names" do
+  it "chains two scopes" do
+    expect(Invoice.foo.bar).to eq "quux"
+  end
+
+  xit "does not allow duplicate scope names" do
     Invoice.scope :bar, -> { where(name: "Invoice 1") } { puts "foo" }
     expect {
       Invoice.scope :bar, -> { where(name: "Invoice 1") }
