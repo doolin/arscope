@@ -6,6 +6,8 @@ class Invoice < ActiveRecord::Base
 
   belongs_to :order
 
+  scope :foo, -> { where(name: "quux") }
+
   scope :bar, -> { where(name: "Invoice 1") }
 #=begin
   scope :bar, -> { where(name: "Invoice 2") } do

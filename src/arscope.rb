@@ -150,8 +150,10 @@ describe Invoice do
     Invoice.methods.should  include :foo
   end
 
+  # Need to load an Invoice in the db such that this test passes.
+  # Experiment with defining the scopes on the fly in the test.
   it "chains two scopes" do
-    expect(Invoice.foo.bar).to eq "quux"
+    expect(Invoice.foo.bar.first.amount).to eq 42.13
   end
 
   xit "does not allow duplicate scope names" do
