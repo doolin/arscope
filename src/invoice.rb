@@ -6,14 +6,14 @@ class Invoice < ActiveRecord::Base
 
   belongs_to :order
 
-  scope :foo, -> { where(name: "quux") }
+  scope :foo, -> { where(name: "Invoice 4") }
 
-  scope :bar, -> { where(name: "Invoice 1") }
-#=begin
+  scope :bar, -> { where(name: "Invoice 4") }
+=begin
   scope :bar, -> { where(name: "Invoice 2") } do
     "foo"
   end
-#=end
+=end
 
   protected
   class << self

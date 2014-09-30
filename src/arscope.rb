@@ -125,7 +125,7 @@ o3.save
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
 o4 = Order.new :name => "Order 4"
-i4 = Invoice.new :name => "Invoice 4"
+i4 = Invoice.new :name => "Invoice 4", amount: 42.13
 o4.invoice = i4
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
@@ -153,6 +153,8 @@ describe Invoice do
   # Need to load an Invoice in the db such that this test passes.
   # Experiment with defining the scopes on the fly in the test.
   it "chains two scopes" do
+    #expect(Invoice.foo.bar.first.amount).to eq 42.13
+    Invoice.create :name => "Invoice 4", amount: 42.13
     expect(Invoice.foo.bar.first.amount).to eq 42.13
   end
 
