@@ -98,35 +98,35 @@ module LocalScoper
   end
 end
 
-class Order < ActiveRecord::Base
-  has_one :invoice
+class Hill < ActiveRecord::Base
+  has_one :cave
 
-  #scope :bar, -> { where(name: "Order 1") }
+  #scope :bar, -> { where(name: "Hill 1") }
 end
 
-load './invoice.rb'
+load './cave.rb'
 
 # http://guides.rubyonrails.org/initialization.html
 
 # Assign an object to a has_one association in an existing object,
 # that associated object will be saved.
 # Read from p. 323 in Agile 3rd Edition on CRUD.
-o1 = Order.create :name => "Order 1"
-i1 = Invoice.new :name => "Invoice 1"
-o1.invoice = i1
+o1 = Hill.create :name => "Hill 1"
+i1 = Cave.new :name => "Cave 1"
+o1.cave = i1
 
-o2 = Order.new :name => "Order 2"
-i2 = Invoice.new :name => "Invoice 2"
+o2 = Hill.new :name => "Hill 2"
+i2 = Cave.new :name => "Cave 2"
 i2.save
 
-o3 = Order.new :name => "Order 3"
+o3 = Hill.new :name => "Hill 3"
 o3.save
 
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
-o4 = Order.new :name => "Order 4"
-i4 = Invoice.new :name => "Invoice 4", amount: 42.13
-o4.invoice = i4
+o4 = Hill.new :name => "Hill 4"
+i4 = Cave.new :name => "Cave 4", amount: 42.13
+o4.cave = i4
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
 
@@ -136,35 +136,35 @@ RSpec.configure do |config|
   end
 end
 
-describe Invoice do
+describe Cave do
 
-  let(:invoice) { Invoice.new }
+  let(:cave) { Cave.new }
 
-  it "new Invoice should be valid" do
-    invoice.should be_valid
+  it "new Cave should be valid" do
+    cave.should be_valid
   end
 
   it "makes a scope" do
-    Invoice.scope("foo", -> {}) # { "quux" }
-    expect(Invoice.foo.count).to be >= 0
-    Invoice.methods.should  include :foo
+    Cave.scope("foo", -> {}) # { "quux" }
+    expect(Cave.foo.count).to be >= 0
+    Cave.methods.should  include :foo
   end
 
-  # Need to load an Invoice in the db such that this test passes.
+  # Need to load an Cave in the db such that this test passes.
   # Experiment with defining the scopes on the fly in the test.
   it "chains two scopes" do
-    #expect(Invoice.foo.bar.first.amount).to eq 42.13
-    Invoice.create :name => "Invoice 4", amount: 42.13
-    expect(Invoice.foo.bar.first.amount).to eq 42.13
+    #expect(Cave.foo.bar.first.amount).to eq 42.13
+    Cave.create :name => "Cave 4", amount: 42.13
+    expect(Cave.foo.bar.first.amount).to eq 42.13
   end
 
   xit "does not allow duplicate scope names" do
-    Invoice.scope :bar, -> { where(name: "Invoice 1") } { puts "foo" }
+    Cave.scope :bar, -> { where(name: "Cave 1") } { puts "foo" }
     expect {
-      Invoice.scope :bar, -> { where(name: "Invoice 1") }
-      #Invoice.scope :quux, -> { where(name: "Invoice 1") }
+      Cave.scope :bar, -> { where(name: "Cave 1") }
+      #Cave.scope :quux, -> { where(name: "Cave 1") }
     }.to raise_error ArgumentError
 
-    expect { Invoice.scope :bar, -> {} }.to raise_error
+    expect { Cave.scope :bar, -> {} }.to raise_error
   end
 end

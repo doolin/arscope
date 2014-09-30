@@ -1,6 +1,6 @@
-class Orders < ActiveRecord::Migration
+class Hills < ActiveRecord::Migration
   def self.up
-    create_table :orders do |t|
+    create_table :hills do |t|
       t.string :name
       t.string :address
 
@@ -8,32 +8,32 @@ class Orders < ActiveRecord::Migration
     end
   end
   def self.down
-    drop_table :orders
+    drop_table :hills
   end
 end
 
-unless Orders.table_exists?(:orders)
-  ActiveRecord::Migrator.migrate(Orders.up)
+unless Hills.table_exists?(:hills)
+  ActiveRecord::Migrator.migrate(Hills.up)
 end
 
-class Invoices < ActiveRecord::Migration
+class Caves < ActiveRecord::Migration
   def self.up
-    create_table :invoices do |t|
+    create_table :caves do |t|
       t.string :name
       t.float  :amount
-      t.integer :order_id
+      t.integer :hill_id
       t.string :status
 
       t.timestamp
     end
   end
   def self.down
-    drop_table :invoices
+    drop_table :caves
   end
 end
 
-unless Invoices.table_exists?(:invoices)
-  ActiveRecord::Migrator.migrate(Invoices.up)
+unless Caves.table_exists?(:caves)
+  ActiveRecord::Migrator.migrate(Caves.up)
 end
 
 =begin
