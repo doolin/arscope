@@ -56,6 +56,11 @@ require 'ap'
 # Scopes are chainable
 # to_sql on scopes, or more precisely, the arel returned?
 
+ActiveSupport::Inflector.inflections do |inflect|
+  inflect.plural "cave", "caves"
+end
+
+
 load './connection.rb'
 load './migrations.rb'
 
@@ -99,9 +104,9 @@ module LocalScoper
 end
 
 class Hill < ActiveRecord::Base
-  has_one :cave
+  has_many :caves
 
-  #scope :bar, -> { where(name: "Hill 1") }
+  scope :long, -> { where("length > 1000") }
 end
 
 load './cave.rb'
@@ -113,7 +118,7 @@ load './cave.rb'
 # Read from p. 323 in Agile 3rd Edition on CRUD.
 o1 = Hill.create :name => "Hill 1"
 i1 = Cave.new :name => "Cave 1"
-o1.cave = i1
+#o1.caves = [i1]
 
 o2 = Hill.new :name => "Hill 2"
 i2 = Cave.new :name => "Cave 2"
@@ -125,14 +130,22 @@ o3.save
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
 o4 = Hill.new :name => "Hill 4"
-i4 = Cave.new :name => "Cave 4", amount: 42.13
-o4.cave = i4
+i4 = Cave.new :name => "Cave 4", length: 42.13
+#o4.cave = i4
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = [:should, :expect]
+  end
+end
+
+describe Hill do
+  let(:hill) { Hill.new }
+
+  it "creates a valid Hill" do
+    expect(hill).to be_valid
   end
 end
 
@@ -154,8 +167,8 @@ describe Cave do
   # Experiment with defining the scopes on the fly in the test.
   it "chains two scopes" do
     #expect(Cave.foo.bar.first.amount).to eq 42.13
-    Cave.create :name => "Cave 4", amount: 42.13
-    expect(Cave.foo.bar.first.amount).to eq 42.13
+    Cave.create :name => "Cave 4", length: 42.13
+    expect(Cave.foo.bar.first.length).to eq 42.13
   end
 
   xit "does not allow duplicate scope names" do

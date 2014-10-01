@@ -25,4 +25,3 @@ class Cave < ActiveRecord::Base
   end
 end
 
-

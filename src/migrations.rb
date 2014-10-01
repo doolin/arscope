@@ -2,7 +2,7 @@ class Hills < ActiveRecord::Migration
   def self.up
     create_table :hills do |t|
       t.string :name
-      t.string :address
+      t.string :location
 
       t.timestamp
     end
@@ -20,7 +20,7 @@ class Caves < ActiveRecord::Migration
   def self.up
     create_table :caves do |t|
       t.string :name
-      t.float  :amount
+      t.float  :length
       t.integer :hill_id
       t.string :status
 
