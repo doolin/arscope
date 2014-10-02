@@ -9,6 +9,8 @@ class Animal < ActiveRecord::Base
   scope :foo, -> { where(name: "animal 4") }
 
   scope :bar, -> { where(name: "animal 4") }
+
+  scope :count, -> (type) { where(type: type) }
 =begin
   scope :bar, -> { where(name: "animal 2") } do
     "foo"
