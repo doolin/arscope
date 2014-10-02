@@ -153,8 +153,17 @@ describe Animal do
 
   let(:animal) { Animal.new }
 
+  before :all do
+    # Nasty kludge. You can do better than this.
+    require './seed'
+  end
+
   it "new animal should be valid" do
     animal.should be_valid
+  end
+
+  it "finds a Funny farm" do
+    Farm.where(name: 'Funny').first.should be_valid
   end
 
   it "makes a scope" do
