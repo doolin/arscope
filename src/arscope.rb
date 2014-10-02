@@ -57,7 +57,7 @@ require 'ap'
 # to_sql on scopes, or more precisely, the arel returned?
 
 ActiveSupport::Inflector.inflections do |inflect|
-  inflect.plural "cave", "caves"
+  inflect.plural "animal", "animals"
 end
 
 
@@ -103,35 +103,35 @@ module LocalScoper
   end
 end
 
-class Hill < ActiveRecord::Base
-  has_many :caves
+class Farm < ActiveRecord::Base
+  has_many :animals
 
   scope :long, -> { where("length > 1000") }
 end
 
-load './cave.rb'
+load './animal.rb'
 
 # http://guides.rubyonrails.org/initialization.html
 
 # Assign an object to a has_one association in an existing object,
 # that associated object will be saved.
 # Read from p. 323 in Agile 3rd Edition on CRUD.
-o1 = Hill.create :name => "Hill 1"
-i1 = Cave.new :name => "Cave 1"
-#o1.caves = [i1]
+o1 = Farm.create :name => "farm 1"
+i1 = Animal.new :name => "animal 1"
+#o1.animals = [i1]
 
-o2 = Hill.new :name => "Hill 2"
-i2 = Cave.new :name => "Cave 2"
+o2 = Farm.new :name => "farm 2"
+i2 = Animal.new :name => "animal 2"
 i2.save
 
-o3 = Hill.new :name => "Hill 3"
+o3 = Farm.new :name => "farm 3"
 o3.save
 
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
-o4 = Hill.new :name => "Hill 4"
-i4 = Cave.new :name => "Cave 4", length: 42.13
-#o4.cave = i4
+o4 = Farm.new :name => "farm 4"
+i4 = Animal.new :name => "animal 5", length: 42.13
+#o4.animal = i4
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
 
@@ -141,43 +141,44 @@ RSpec.configure do |config|
   end
 end
 
-describe Hill do
-  let(:hill) { Hill.new }
+describe Farm do
+  let(:farm) { Farm.new }
 
-  it "creates a valid Hill" do
-    expect(hill).to be_valid
+  it "creates a valid farm" do
+    expect(farm).to be_valid
   end
 end
 
-describe Cave do
+describe Animal do
 
-  let(:cave) { Cave.new }
+  let(:animal) { Animal.new }
 
-  it "new Cave should be valid" do
-    cave.should be_valid
+  it "new animal should be valid" do
+    animal.should be_valid
   end
 
   it "makes a scope" do
-    Cave.scope("foo", -> {}) # { "quux" }
-    expect(Cave.foo.count).to be >= 0
-    Cave.methods.should  include :foo
+    ## Put this on a slide
+    Animal.scope("foo", -> {}) # { "quux" }
+    expect(Animal.foo.count).to be >= 0
+    Animal.methods.should  include :foo
   end
 
-  # Need to load an Cave in the db such that this test passes.
+  # Need to load an animal in the db such that this test passes.
   # Experiment with defining the scopes on the fly in the test.
   it "chains two scopes" do
-    #expect(Cave.foo.bar.first.amount).to eq 42.13
-    Cave.create :name => "Cave 4", length: 42.13
-    expect(Cave.foo.bar.first.length).to eq 42.13
+    #expect(animal.foo.bar.first.amount).to eq 42.13
+    Animal.create :name => "animal 4", length: 42.13
+    expect(Animal.foo.bar.first.length).to eq 42.13
   end
 
   xit "does not allow duplicate scope names" do
-    Cave.scope :bar, -> { where(name: "Cave 1") } { puts "foo" }
+    Animal.scope :bar, -> { where(name: "animal 1") } { puts "foo" }
     expect {
-      Cave.scope :bar, -> { where(name: "Cave 1") }
-      #Cave.scope :quux, -> { where(name: "Cave 1") }
+      Animal.scope :bar, -> { where(name: "animal 1") }
+      #animal.scope :quux, -> { where(name: "animal 1") }
     }.to raise_error ArgumentError
 
-    expect { Cave.scope :bar, -> {} }.to raise_error
+    expect { animal.scope :bar, -> {} }.to raise_error
   end
 end

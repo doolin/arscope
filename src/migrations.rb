@@ -1,6 +1,6 @@
-class Hills < ActiveRecord::Migration
+class Farms < ActiveRecord::Migration
   def self.up
-    create_table :hills do |t|
+    create_table :farms do |t|
       t.string :name
       t.string :location
 
@@ -8,32 +8,32 @@ class Hills < ActiveRecord::Migration
     end
   end
   def self.down
-    drop_table :hills
+    drop_table :farms
   end
 end
 
-unless Hills.table_exists?(:hills)
-  ActiveRecord::Migrator.migrate(Hills.up)
+unless Farms.table_exists?(:farms)
+  ActiveRecord::Migrator.migrate(Farms.up)
 end
 
-class Caves < ActiveRecord::Migration
+class Animals < ActiveRecord::Migration
   def self.up
-    create_table :caves do |t|
+    create_table :animals do |t|
       t.string :name
       t.float  :length
-      t.integer :hill_id
+      t.integer :farm_id
       t.string :status
 
       t.timestamp
     end
   end
   def self.down
-    drop_table :caves
+    drop_table :animals
   end
 end
 
-unless Caves.table_exists?(:caves)
-  ActiveRecord::Migrator.migrate(Caves.up)
+unless Animals.table_exists?(:animals)
+  ActiveRecord::Migrator.migrate(Animals.up)
 end
 
 =begin

@@ -1,16 +1,16 @@
-class Cave < ActiveRecord::Base
+class Animal < ActiveRecord::Base
   # TODO: explain why we want to extend rather than include,
   # and how that implies a scope is not much different than
   # a regular Ruby class method.
   #extend LocalScoper
 
-  belongs_to :hill
+  belongs_to :farm
 
-  scope :foo, -> { where(name: "Cave 4") }
+  scope :foo, -> { where(name: "animal 4") }
 
-  scope :bar, -> { where(name: "Cave 4") }
+  scope :bar, -> { where(name: "animal 4") }
 =begin
-  scope :bar, -> { where(name: "Cave 2") } do
+  scope :bar, -> { where(name: "animal 2") } do
     "foo"
   end
 =end
