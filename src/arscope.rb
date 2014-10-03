@@ -4,7 +4,7 @@ require 'active_record'
 require 'active_support'
 require 'logger'
 require 'rspec'
-require 'ap'
+#require 'ap'
 
 #####
 ####  Rails scopes are class methods invoked by instances.

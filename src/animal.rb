@@ -10,7 +10,8 @@ class Animal < ActiveRecord::Base
 
   scope :bar, -> { where(name: "animal 4") }
 
-  scope :count, -> (type) { where(type: type) }
+  ##  Why can't we use 'type' here?
+  scope :count, -> (kind) { where(type: kind) }
 =begin
   scope :bar, -> { where(name: "animal 2") } do
     "foo"

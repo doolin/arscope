@@ -23,7 +23,7 @@ class Animals < ActiveRecord::Migration
       t.float  :length
       t.integer :farm_id
       t.string :status
-      t.string :type
+      t.string :kind
 
       t.timestamp
     end
