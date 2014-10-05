@@ -1,5 +1,6 @@
 bessie = Animal.create(kind: 'cow', name: 'Bessie')
-Animal.create(kind: 'goat', name: 'Shredder')
-Animal.create(kind: 'dog', name: 'Rover')
-Animal.create(kind: 'cat', name: 'Wheezie')
-Farm.create(name: "Funny", animals: [bessie])
+shredder = Animal.create(kind: 'goat', name: 'Shredder')
+rover = Animal.create(kind: 'dog', name: 'Rover')
+wheezie = Animal.create(kind: 'cat', name: 'Wheezie')
+funny_farm = Farm.create(name: "Funny", animals: [bessie, shredder, rover, wheezie], location: 'moon')
+funny_farm.save!
