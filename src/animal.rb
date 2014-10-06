@@ -6,7 +6,7 @@ class Animal < ActiveRecord::Base
 
   belongs_to :farm
 
-  scope :foo, -> { where(name: "animal 4") }
+  scope :needs_vet, -> { where("last_vet > ?", 1.year.ago) }
 
   scope :bar, -> { where(name: "animal 4") }
 

@@ -24,6 +24,8 @@ class Animals < ActiveRecord::Migration
       t.integer :farm_id
       t.string :status
       t.string :kind
+      t.string :role
+      t.datetime :last_vet
 
       t.timestamp
     end
