@@ -4,6 +4,7 @@ require 'active_record'
 require 'active_support'
 require 'logger'
 require 'rspec'
+require 'pry-nav'
 #require 'ap'
 
 #####
@@ -176,6 +177,19 @@ describe Animal do
 
   it "new animal should be valid" do
     animal.should be_valid
+  end
+
+  it "it finds the pets" do
+    expect(Animal.pets.count).to eq 2
+  end
+
+  it "it finds overdue for vet" do
+    #binding.pry
+    expect(Animal.needs_vet.count).to eq 3
+  end
+
+  it "finds the pet for a vet" do
+    expect(Animal.pets.needs_vet.count).to eq 1
   end
 
   it "makes a scope" do
