@@ -14,6 +14,16 @@ class Animal < ActiveRecord::Base
 
   ##  Why can't we use 'type' here?
   scope :count, -> (kind) { where(type: kind) }
+
+  def self.working
+    where(kind: 'working')
+  end
+
+  def self.show
+    where(kind: 'show')
+  end
+
+
 =begin
   scope :bar, -> { where(name: "animal 2") } do
     "foo"

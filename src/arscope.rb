@@ -183,6 +183,10 @@ describe Animal do
     expect(Animal.pets.count).to eq 2
   end
 
+  it "finds no show animals which need the vet" do
+    expect(Animal.show.needs_vet.count).to eq 0
+  end
+
   it "it finds overdue for vet" do
     #binding.pry
     expect(Animal.needs_vet.count).to eq 3
