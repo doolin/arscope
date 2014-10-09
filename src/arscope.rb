@@ -160,8 +160,7 @@ describe Farm do
 
   it "Funny Farm finds four animals" do
     funny_farm = Farm.where(name: 'Funny').first
-    #puts funny_farm.inspect
-    expect(funny_farm.animals.size).to eq 5
+    expect(funny_farm.animals.size).to eq 7
   end
 
 end
@@ -189,7 +188,7 @@ describe Animal do
 
   it "it finds overdue for vet" do
     #binding.pry
-    expect(Animal.needs_vet.count).to eq 3
+    expect(Animal.needs_vet.count).to eq 4
   end
 
   it "finds the pet for a vet" do
