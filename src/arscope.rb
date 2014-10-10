@@ -73,7 +73,7 @@ load './migrations.rb'
 #     module Named
 module LocalScoper
   def method_missing arg1, arg2
-    puts "LocalScoper method_missing..."
+    puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
     ap "Method #{arg1} with #{arg2} is missing"
     nil
   end

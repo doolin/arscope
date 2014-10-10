@@ -2,7 +2,7 @@ class Animal < ActiveRecord::Base
   # TODO: explain why we want to extend rather than include,
   # and how that implies a scope is not much different than
   # a regular Ruby class method.
-  #extend LocalScoper
+  # extend LocalScoper
 
   belongs_to :farm
 
@@ -13,7 +13,8 @@ class Animal < ActiveRecord::Base
   scope :bar, -> { where(name: "animal 4") }
 
   ##  Why can't we use 'type' here?
-  scope :count, -> (kind) { where(type: kind) }
+  #scope :is, -> (kind) { where(type: kind) }
+  scope :is, -> (kind) { where(kind: kind) }
 
   def self.working
     where(kind: 'working')
