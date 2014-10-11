@@ -23,6 +23,8 @@ require 'pry-nav'
 #
 #
 # HOW:
+# * By defining class methods which query active record and return
+#   (possibly empty) relations.
 #
 # WHAT:
 #
@@ -73,14 +75,14 @@ load './migrations.rb'
 #     module Named
 module LocalScoper
   def method_missing arg1, arg2
-    puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
+    # puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
     ap "Method #{arg1} with #{arg2} is missing"
     nil
   end
 
   # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb
   # define method_missing to get this working for now.
-  def scope(name, body, &block)
+  def my_scope(name, body, &block)
 
     ret_val = dangerous_class_method?(name)
     ap "#{__FILE__} #{__LINE__} ret_val: #{ret_val.class}"

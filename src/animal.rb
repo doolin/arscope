@@ -2,7 +2,8 @@ class Animal < ActiveRecord::Base
   # TODO: explain why we want to extend rather than include,
   # and how that implies a scope is not much different than
   # a regular Ruby class method.
-  # extend LocalScoper
+  # At the moment, this is blowing up the stack and I don't know why.
+  extend LocalScoper
 
   belongs_to :farm
 
