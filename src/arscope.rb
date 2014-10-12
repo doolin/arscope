@@ -216,6 +216,13 @@ describe Animal do
     expect(Animal.foo.bar.first.length).to eq 42.13
   end
 
+  # Set this up to test the scopes first.
+  # Testing scopes is important when replacing AR.
+  it "handles non-existent attributes" do
+    puts Animal.by_role("working").by_name("Bessie").inspect
+    expect(Animal.by_role("working").by_name("Bessie")).to eq ["bessie"]
+  end
+
   it "silently allows duplicate scope definitions" do
     Animal.scope :testem, -> { where(name: "animal 1") } #{ puts "foo" }
     expect {
@@ -223,7 +230,7 @@ describe Animal do
     }.not_to raise_error
   end
 
-  it "does not allow duplicate scope names" do
+  xit "does not allow duplicate scope names" do
     Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
     #expect { Animal.scope :utotem, -> { where(role: "working") } }.to raise_error ArgumentError
     expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError

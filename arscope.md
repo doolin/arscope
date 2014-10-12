@@ -26,8 +26,10 @@ Two main reasons:
 
 1. Scopes provide a semantically convenient shorthand for SQL
    statements.
-1. Scopes can be chained, tremendously easing the cognitive load of
+1. Scopes can be *chained*, tremendously easing the cognitive load of
    creating the correct SQL for complicated queries.
+
+
 
 # What we want to get out of this
 
@@ -228,6 +230,18 @@ Simple explanation, demo/example.
 @@@ ruby
 scope :by_title, -> title { where(title: title) if title.present? }
 ~~~~
+
+# Should scopes by tested?
+
+Depends.
+
+But probably, yes.
+
+If developing Test-First, certainly. One can (and should) always remove redundant
+tests later.
+
+However, no matter anyone's opinion, we're testing scopes in this talk
+because it's useful for demonstrating behavior.
 
 # Replace scope with class method
 

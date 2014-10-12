@@ -18,6 +18,8 @@ class Animal < ActiveRecord::Base
   #scope :is, -> (kind) { where(type: kind) }
   scope :is, -> (kind) { where(kind: kind) }
 
+  scope :by_name, -> (n) { where(name: n) }
+
   def self.working
     where(kind: 'working')
   end
@@ -27,6 +29,10 @@ class Animal < ActiveRecord::Base
   end
 
   def self.utotem
+  end
+
+  def self.by_role role
+    where(role: role)
   end
 
 =begin
