@@ -74,16 +74,17 @@ load './migrations.rb'
 #   module Scoping
 #     module Named
 module LocalScoper
-  def method_missing arg1, arg2
-    # puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
+  def my_method_missing arg1, arg2
+    #puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
     ap "Method #{arg1} with #{arg2} is missing"
-    nil
+    #nil
   end
 
   # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb
   # define method_missing to get this working for now.
   def my_scope(name, body, &block)
 
+=begin
     ret_val = dangerous_class_method?(name)
     ap "#{__FILE__} #{__LINE__} ret_val: #{ret_val.class}"
 
@@ -92,8 +93,9 @@ module LocalScoper
         "on the model \"#{self.name}\", but Active Record already defined " \
         "a class method with the same name."
     end
+=end
 
-    ap "From LocalScoper"
+    #ap "From LocalScoper"
 
     extension = Module.new(&block) if block
 
@@ -112,7 +114,9 @@ class Farm < ActiveRecord::Base
   scope :long, -> { where("length > 1000") }
 end
 
+puts "before loading animal"
 load './animal.rb'
+puts "after loading animal"
 
 # http://guides.rubyonrails.org/initialization.html
 
@@ -212,13 +216,16 @@ describe Animal do
     expect(Animal.foo.bar.first.length).to eq 42.13
   end
 
-  xit "does not allow duplicate scope names" do
-    Animal.scope :bar, -> { where(name: "animal 1") } { puts "foo" }
+  it "silently allows duplicate scope definitions" do
+    Animal.scope :testem, -> { where(name: "animal 1") } #{ puts "foo" }
     expect {
-      Animal.scope :bar, -> { where(name: "animal 1") }
-      #animal.scope :quux, -> { where(name: "animal 1") }
-    }.to raise_error ArgumentError
+      Animal.scope :testem, -> { where(name: "animal 1") }
+    }.not_to raise_error
+  end
 
-    expect { animal.scope :bar, -> {} }.to raise_error
+  it "does not allow duplicate scope names" do
+    Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
+    #expect { Animal.scope :utotem, -> { where(role: "working") } }.to raise_error ArgumentError
+    expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError
   end
 end

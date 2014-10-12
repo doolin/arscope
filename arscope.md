@@ -214,7 +214,7 @@ include 'rspec'
 
 load './connection.rb'
 load './migrations.rb'
-load './invoice.rb'
+load './animals.rb'
 ~~~~
 
 From here on out, let's assume we're all smart enough to remember

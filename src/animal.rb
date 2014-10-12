@@ -3,7 +3,7 @@ class Animal < ActiveRecord::Base
   # and how that implies a scope is not much different than
   # a regular Ruby class method.
   # At the moment, this is blowing up the stack and I don't know why.
-  extend LocalScoper
+  #extend LocalScoper
 
   belongs_to :farm
 
@@ -11,6 +11,7 @@ class Animal < ActiveRecord::Base
 
   scope :pets, -> { where(role: 'pet') }
 
+  scope :bar, -> { where(name: "animal 4") }
   scope :bar, -> { where(name: "animal 4") }
 
   ##  Why can't we use 'type' here?
@@ -25,6 +26,8 @@ class Animal < ActiveRecord::Base
     where(kind: 'show')
   end
 
+  def self.utotem
+  end
 
 =begin
   scope :bar, -> { where(name: "animal 2") } do
