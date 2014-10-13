@@ -337,6 +337,12 @@ As usual, employ (or deploy) at your own risk:
   from Jeff Kreeftmeijer.
 * [Class structure for method
   chaining](http://tjackiw.tumblr.com/post/23155838377/interview-challenge-ruby-method-chaining).
+* [Extending vs
+  including](http://www.medihack.org/2011/03/15/intend-to-extend/) good refresher article.
+* [Rails named scope
+  definition](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb)
+  can't go wrong with source code.
+* [`dangerous_class_method?`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_methods.rb#L148), more source.
 
 # Moar?
 
