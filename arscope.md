@@ -330,6 +330,8 @@ As usual, employ (or deploy) at your own risk:
 
 ### Links
 
+* [Scopes vs. class methods](http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/)
+  from Platformatec.
 
 # Moar?
 
