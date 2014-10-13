@@ -19,9 +19,10 @@ end
 class Animals < ActiveRecord::Migration
   def self.up
     create_table :animals do |t|
-      t.string :name
-      t.float  :length
       t.integer :farm_id
+      t.string :name
+      t.string :breed
+      t.float  :length
       t.string :status
       t.string :kind
       t.string :role
