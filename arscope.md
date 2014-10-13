@@ -332,6 +332,11 @@ As usual, employ (or deploy) at your own risk:
 
 * [Scopes vs. class methods](http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/)
   from Platformatec.
+* [Method
+  chaining](http://jeffkreeftmeijer.com/2011/method-chaining-and-lazy-evaluation-in-ruby/)
+  from Jeff Kreeftmeijer.
+* [Class structure for method
+  chaining](http://tjackiw.tumblr.com/post/23155838377/interview-challenge-ruby-method-chaining).
 
 # Moar?
 
