@@ -29,7 +29,7 @@ Two main reasons:
 1. Scopes can be *chained*, tremendously easing the cognitive load of
    creating the correct SQL for complicated queries.
 
-
+### Basically, scopes allow defining custom database queries and query fragments
 
 # What we want to get out of this
 
