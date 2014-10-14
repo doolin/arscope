@@ -220,7 +220,7 @@ describe Animal do
   # Testing scopes is important when replacing AR.
   it "handles non-existent attributes" do
     puts Animal.by_role("working").by_name("Bessie").inspect
-    expect(Animal.by_role("working").by_name("Bessie")).to eq ["bessie"]
+    expect(Animal.by_role("working").by_name("Bessie").first.name).to eq "Bessie"
   end
 
   it "silently allows duplicate scope definitions" do
