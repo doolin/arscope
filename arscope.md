@@ -1,4 +1,4 @@
-# ActiveRecord Scopes with Rails (and without scopes)
+# ActiveRecord Scopes *without* Rails (and without scopes)
 
 
 # DISCLAIMER
@@ -125,26 +125,28 @@ load './connection.rb'
 
 # Migrations
 
-
-For now, just the one `orders` table:
-
 ~~~~
 @@@ ruby
-class Orders < ActiveRecord::Migration
+class Animals < ActiveRecord::Migration
   def self.up
-    create_table :orders do |t|
+    create_table :animals do |t|
+      t.integer :farm_id
       t.string :name
-      t.string :address
+      t.string :breed
+      t.string :kind
+      t.string :role
+      t.string :sku
+      t.datetime :last_vet
       t.timestamp
     end
   end
   def self.down
-    drop_table :orders
+    drop_table :animals
   end
 end
 
-unless Orders.table_exists?(:orders)
-  ActiveRecord::Migrator.migrate(Orders.up)
+unless Animals.table_exists?(:animals)
+  ActiveRecord::Migrator.migrate(Animals.up)
 end
 ~~~~
 
@@ -228,7 +230,7 @@ Simple explanation, demo/example.
 
 ~~~~
 @@@ ruby
-scope :by_title, -> title { where(title: title) if title.present? }
+scope :by_role, -> role { where(role: role) if role.present? }
 ~~~~
 
 # Should scopes by tested?
@@ -251,9 +253,9 @@ we get something like this:
 
 ~~~~
 @@@ ruby
-def self.by_title title
-  if title.present?
-    where(title: title)
+def self.by_role role
+  if role.present?
+    where(role: role)
   else
     all
   end
@@ -266,8 +268,8 @@ But that's nasty, don't you think? Let's do it
 
 ~~~~
 @@@ ruby
-def self.by_title title
-  where(title: title) if title.present? or all
+def self.by_role role
+  where(role: role) if role.present? or all
 end
 ~~~~
 
