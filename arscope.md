@@ -272,6 +272,10 @@ end
 ~~~~
 
 
+# Wheezy the Maine Coon
+
+![Wheezy](/images/maine_coon_wheezy.jpg)
+
 
 
 # Why chaining works
