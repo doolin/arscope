@@ -137,7 +137,7 @@ o3.save
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
 o4 = Farm.new :name => "farm 4"
-i4 = Animal.new :name => "animal 5", length: 42.13
+i4 = Animal.new :name => "animal 5", weight: 42.13
 #o4.animal = i4
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
@@ -212,8 +212,8 @@ describe Animal do
   # Experiment with defining the scopes on the fly in the test.
   it "chains two scopes" do
     #expect(animal.foo.bar.first.amount).to eq 42.13
-    Animal.create :name => "animal 4", length: 42.13
-    expect(Animal.foo.bar.first.length).to eq 42.13
+    Animal.create :name => "animal 4", weight: 42.13
+    expect(Animal.foo.bar.first.weight).to eq 42.13
   end
 
   # Set this up to test the scopes first.

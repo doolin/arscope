@@ -22,8 +22,7 @@ class Animals < ActiveRecord::Migration
       t.integer :farm_id
       t.string :name
       t.string :breed
-      t.float  :length
-      t.string :status
+      t.float  :weight
       t.string :kind
       t.string :role
       t.string :sku
