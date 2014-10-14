@@ -28,7 +28,8 @@ class Animal < ActiveRecord::Base
     where(kind: 'show')
   end
 
-  def self.utotem
+  def self.by_breed breed
+    where(breed: breed)
   end
 
   def self.by_role role
