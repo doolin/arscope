@@ -11,8 +11,8 @@ class Animal < ActiveRecord::Base
 
   scope :pets, -> { where(role: 'pet') }
 
-  scope :bar, -> { where(name: "animal 4") }
-  scope :bar, -> { where(name: "animal 4") }
+  #scope :bar, -> { where(name: "animal 4") }
+  #scope :bar, -> { where(name: "animal 4") }
 
   ##  Why can't we use 'type' here?
   #scope :is, -> (kind) { where(type: kind) }
