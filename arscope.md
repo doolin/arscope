@@ -130,12 +130,12 @@ load './connection.rb'
 class Animals < ActiveRecord::Migration
   def self.up
     create_table :animals do |t|
-      t.integer :farm_id
       t.string :name
-      t.string :breed
+      # Why can't we use `type` here?
+      # t.string :type
       t.string :kind
+      t.string :breed
       t.string :role
-      t.string :sku
       t.datetime :last_vet
       t.timestamp
     end
@@ -172,7 +172,7 @@ load './migrations.rb'
 
 # How 'bout a model, then...
 
-Create a file `invoice.rb`:
+Create a file `animal.rb`:
 
 ~~~~
 @@@ ruby
@@ -196,7 +196,7 @@ include 'rspec'
 
 load './connection.rb'
 load './migrations.rb'
-load './animals.rb'
+load './animal.rb'
 ~~~~
 
 From here on out, let's assume we're all smart enough to remember
@@ -278,6 +278,7 @@ end
 ![Wheezy](/images/maine_coon_wheezy.jpg)
 
 
+# More useful scopes and methods
 
 ~~~~
 @@@ ruby
@@ -305,9 +306,40 @@ class Animal < ActiveRecord::Base
 
 # Scope-to-class method chaining
 
+* Scope: `is`
+* Class method: `by_role`
+
+~~~~
+@@@ ruby
+it "finds the pet cats by kind and role" do
+  expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+end
+~~~~
+
 # Class method-to-scope chaining
 
+* Class method: `by_role`
+* Scope: `is`
+
+~~~~
+@@@ ruby
+it "finds the pet cats by role and kind" do
+  expect(Animal.by_role('pet').is('cat').pluck(:name)).to include "Wheezie"
+end
+~~~~
+
+
 # Class method-to-class method chaining
+
+* Class method: `by_role`
+* Class method: `by_breed`
+
+~~~~
+@@@ ruby
+it "finds all the angus" do
+  expect(Animal.by_role('stock').by_breed('angus').size).to eq 2
+end
+~~~~
 
 
 # How Arel works

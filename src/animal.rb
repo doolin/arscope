@@ -25,6 +25,7 @@ class Animal < ActiveRecord::Base
   end
 
   def self.show
+    # Where is `where` defined in ActiveRecord?
     where(kind: 'show')
   end
 
@@ -33,14 +34,8 @@ class Animal < ActiveRecord::Base
   end
 
   def self.by_role role
-    where(role: role)
+    where(role: role) if role.present? or all
   end
-
-=begin
-  scope :bar, -> { where(name: "animal 2") } do
-    "foo"
-  end
-=end
 
   protected
   class << self

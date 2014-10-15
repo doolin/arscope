@@ -204,8 +204,28 @@ describe Animal do
     expect(Animal.pets.is("cat").pluck(:name)).to include "Wheezie"
   end
 
-  it "finds the pet cats by role" do
+  it "finds the pet cats by kind and role" do
+    expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+  end
+
+  it "finds the pet cats by role and kind" do
     expect(Animal.by_role('pet').is("cat").pluck(:name)).to include "Wheezie"
+  end
+
+  it "finds all the cats and their roles" do
+    cats = Animal.is('cat').by_role('pet').to_sql#.pluck(:name)
+    puts cats.inspect
+    cats = Animal.is('cat').by_role('').to_sql#.pluck(:name)
+    puts cats.inspect
+    cats = Animal.is('cat').by_role(nil).to_sql#.pluck(:name)
+    puts cats.inspect
+    cats = Animal.is('cat').by_role(nil)#.pluck(:name)
+    puts cats.inspect
+    expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+  end
+
+  it "finds all the angus" do
+    expect(Animal.by_role('stock').by_breed('angus').size).to eq 2
   end
 
   it "silently allows duplicate scope definitions" do
