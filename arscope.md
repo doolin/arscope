@@ -177,29 +177,9 @@ Create a file `invoice.rb`:
 ~~~~
 @@@ ruby
 class Animal < ActiveRecord::Base
-  belongs_to :farm
-  scope :needs_vet, -> { where("last_vet < ?", 1.year.ago) }
   scope :pets, -> { where(role: 'pet') }
-  ##  Why can't we use 'type' here?
-  #scope :is, -> (kind) { where(type: kind) }
   scope :is, -> (kind) { where(kind: kind) }
-  scope :by_name, -> (n) { where(name: n) }
-
-  def self.working
-    where(kind: 'working')
-  end
-
-  def self.show
-    where(kind: 'show')
-  end
-
-  def self.by_breed breed
-    where(breed: breed)
-  end
-
-  def self.by_role role
-    where(role: role)
-  end
+end
 ~~~~
 
 
@@ -272,11 +252,6 @@ end
 ~~~~
 
 
-# Wheezy the Maine Coon
-
-![Wheezy](/images/maine_coon_wheezy.jpg)
-
-
 
 # Why chaining works
 
@@ -290,6 +265,42 @@ ARel, from the `all` method.
 * Class method-to-class method chaining
 
 # Scope-to-scope chaining
+
+~~~~
+@@@ ruby
+it "finds the pet cats" do
+  expect(Animal.pets.is("cat").pluck(:name)).to include "Wheezie"
+end
+~~~~
+
+# Wheezy the Maine Coon
+
+![Wheezy](/images/maine_coon_wheezy.jpg)
+
+
+
+~~~~
+@@@ ruby
+class Animal < ActiveRecord::Base
+  scope :needs_vet, -> { where("last_vet < ?", 1.year.ago) }
+  scope :by_name, -> (n) { where(name: n) }
+
+  def self.working
+    where(kind: 'working')
+  end
+
+  def self.show
+    where(kind: 'show')
+  end
+
+  def self.by_breed breed
+    where(breed: breed)
+  end
+
+  def self.by_role role
+    where(role: role)
+  end
+~~~~
 
 
 # Scope-to-class method chaining

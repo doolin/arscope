@@ -148,29 +148,6 @@ RSpec.configure do |config|
   end
 end
 
-describe Farm do
-  before :all do
-    # Nasty kludge. You can do better than this.
-    require './seed'
-  end
-
-  let(:farm) { Farm.new }
-
-  it "creates a valid farm" do
-    expect(farm).to be_valid
-  end
-
-  it "finds a Funny farm" do
-    Farm.where(name: 'Funny').first.should be_valid
-  end
-
-  it "Funny Farm finds four animals" do
-    funny_farm = Farm.where(name: 'Funny').first
-    expect(funny_farm.animals.size).to eq 7
-  end
-
-end
-
 describe Animal do
 
   let(:animal) { Animal.new }
@@ -219,8 +196,16 @@ describe Animal do
   # Set this up to test the scopes first.
   # Testing scopes is important when replacing AR.
   it "handles non-existent attributes" do
-    puts Animal.by_role("working").by_name("Bessie").inspect
+    #puts Animal.by_role("working").by_name("Bessie").inspect
     expect(Animal.by_role("working").by_name("Bessie").first.name).to eq "Bessie"
+  end
+
+  it "finds the pet cats" do
+    expect(Animal.pets.is("cat").pluck(:name)).to include "Wheezie"
+  end
+
+  it "finds the pet cats by role" do
+    expect(Animal.by_role('pet').is("cat").pluck(:name)).to include "Wheezie"
   end
 
   it "silently allows duplicate scope definitions" do
