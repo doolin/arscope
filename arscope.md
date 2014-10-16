@@ -33,21 +33,55 @@ Two main reasons:
 
 # What we want to get out of this
 
-* Understanding how the ActiveRecord implementation of
+* Some understanding how the ActiveRecord implementation of
 scope works.
-* Some tips for debugging scopes.
+* How chaining scopes works.
+* How class methods can chain with scopes.
+* Some tips for debugging scopes. (Hint: use `to_sql`)
 * When and why to pass blocks into scopes.
 * (Personal goal) structure and formatting of talk for
-  content reuse.
+  content reuse. That is, can this talk be delivered on a Kindle?
 
 # Review, semantic convenience
 
 Name scopes for the state they describe.
 
-# Review, chaining scopes
+~~~~
+@@@ ruby
+\# activerecord/lib/active_record/scoping/named.rb
+def scope(name, body, &block)
+  if dangerous_class_method?(name)
+    raise ArgumentError, "Already defined scope"
+  end
+
+  extension = Module.new(&block) if block
+
+  singleton_class.send(:define_method, name) do |*args|
+    scope = all.scoping { body.call(*args) }
+    scope = scope.extending(extension) if extension
+
+    scope || all
+  end
+end
+~~~~
+
+# Review: scopes help generate queries
 
 What we really want to see here is the underlying SQL, using
 the `to_sql` method on the ARel.
+
+Simple explanation, demo/example.
+
+~~~~
+@@@ ruby
+class Animal
+  scope :by_role, -> role { where(role: role) }
+end
+
+2.1.2 :001 > Animal.by_role('working').to_sql
+ => "SELECT \"animals\".* FROM \"animals\"  WHERE \"animals\".\"role\" = 'working'"
+~~~~
+
 
 # Kindle-sized code snippets
 
@@ -202,15 +236,6 @@ load './animal.rb'
 From here on out, let's assume we're all smart enough to remember
 to add the new file.
 
-# Scopes
-
-Simple explanation, demo/example.
-
-~~~~
-@@@ ruby
-scope :by_role, -> role { where(role: role) if role.present? }
-~~~~
-
 # Should scopes be tested?
 
 Depends.
@@ -225,6 +250,29 @@ However, no matter anyone's opinion,
 ### we're testing scopes in this talk,
 
 because it's useful for demonstrating behavior.
+
+# And here's how we're testing scopes...
+
+~~~~
+@@@ ruby
+#!/usr/bin/env ruby
+
+include 'active_record'
+include 'active_support'
+include 'logger'
+include 'rspec'
+
+load './connection.rb'
+load './migrations.rb'
+load './animal.rb'
+
+describe Animal do
+  before(:all) { require './seed' }
+  it "finds the pets" do
+    expect(Animal.pets.count).to eq 2
+  end
+end
+~~~~
 
 
 # Replace scope with class method
@@ -395,6 +443,9 @@ As usual, employ (or deploy) at your own risk:
 
 # Summarizing
 
+This wasn't especially long, but it was dense. Here are a few links
+for digging deeper:
+
 ### Links
 
 * [Scopes vs. class methods](http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/)
@@ -411,16 +462,33 @@ As usual, employ (or deploy) at your own risk:
   can't go wrong with source code.
 * [`dangerous_class_method?`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_methods.rb#L148), more source.
 
-# Moar?
+# Appendix
 
+# `dangerous_class_method?`
 
+~~~~
+@@@ ruby
+  # activerecord/lib/active_record/attribute_methods.rb
+  BLACKLISTED_CLASS_METHODS = %w(private public protected allocate new name parent superclass)
 
-# Even moar?
+  # A class method is 'dangerous' if it is
+  # already (re)defined by Active Record, but
+  # not by any ancestors. (So 'puts' is not dangerous but 'new' is.)
+  def dangerous_class_method?(method_name)
+    BLACKLISTED_CLASS_METHODS.include?(method_name.to_s)
+    || class_method_defined_within?(method_name, Base)
+  end
 
-# Haha! No moar!
+  def class_method_defined_within?(name,
+    klass, superklass = klass.superclass) # :nodoc
 
-### The end
-
-For now.
-
-Thanks for your attention.
+    if klass.respond_to?(name, true)
+      if superklass.respond_to?(name, true)
+        klass.method(name).owner != superklass.method(name).owner
+      else
+        true
+      end
+    else
+      false
+    end
+  end

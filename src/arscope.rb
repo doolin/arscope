@@ -152,10 +152,14 @@ describe Animal do
 
   let(:animal) { Animal.new }
 
+=begin
   before :all do
     # Nasty kludge. You can do better than this.
     require './seed'
   end
+=end
+
+  before(:all) { require './seed' }
 
   it "new animal should be valid" do
     animal.should be_valid
@@ -221,6 +225,7 @@ describe Animal do
     puts cats.inspect
     cats = Animal.is('cat').by_role(nil)#.pluck(:name)
     puts cats.inspect
+    puts Animal.by_role('working').to_sql
     expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
   end
 

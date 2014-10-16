@@ -9,7 +9,7 @@ class Animal < ActiveRecord::Base
 
   scope :needs_vet, -> { where("last_vet < ?", 1.year.ago) }
 
-  scope :pets, -> { where(role: 'pet') }
+  scope :pets, -> { where(role: 'pet') } { x = 4 }
 
   #scope :bar, -> { where(name: "animal 4") }
   #scope :bar, -> { where(name: "animal 4") }
