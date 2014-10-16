@@ -68,9 +68,9 @@ That won't fly in a presentation, it won't fit on a slide.
 
 Won't fit on Kindle screen either.
 
-But we can write a
+But we can write a driver file named `arscope.rb`.
 
-## driver file
+## driver file `arscope.rb`
 
 ~~~~
 @@@ ruby
@@ -83,18 +83,12 @@ include 'rspec'
 
 ~~~~
 
-Put the above code in a file named `arscope.rb`.
-
-We'll eventually need all of these gems, so let's include
-them now and forgot about them.
-
 Since we're interested in scopes, which are ActiveRecord methods,
 we'll need some sort of database connection as well.
 
 # EZ database connection
 
-Let's create a file, `connection.rb`, and in that
-file put the following code:
+Let's create a file, `connection.rb`, with the following code:
 
 ~~~~
 @@@ ruby
@@ -122,8 +116,14 @@ include 'rspec'
 load './connection.rb'
 ~~~~
 
+# Example domain: Farm
 
-# Migrations
+![Farm](/images/farm.jpg)
+
+[Photo credit](https://www.flickr.com/photos/cindy47452/13881944095)
+
+
+# Migrations (farms have animals)
 
 ~~~~
 @@@ ruby
@@ -178,7 +178,7 @@ Create a file `animal.rb`:
 @@@ ruby
 class Animal < ActiveRecord::Base
   scope :pets, -> { where(role: 'pet') }
-  scope :is, -> (kind) { where(kind: kind) }
+  scope :by_kind, -> (kind) { where(kind: kind) }
 end
 ~~~~
 
@@ -211,7 +211,7 @@ Simple explanation, demo/example.
 scope :by_role, -> role { where(role: role) if role.present? }
 ~~~~
 
-# Should scopes by tested?
+# Should scopes be tested?
 
 Depends.
 
@@ -220,8 +220,12 @@ But probably, yes.
 If developing Test-First, certainly. One can (and should) always remove redundant
 tests later.
 
-However, no matter anyone's opinion, we're testing scopes in this talk
+However, no matter anyone's opinion,
+
+### we're testing scopes in this talk,
+
 because it's useful for demonstrating behavior.
+
 
 # Replace scope with class method
 
@@ -252,10 +256,21 @@ end
 ~~~~
 
 
-
 # Why chaining works
 
-ARel, from the `all` method.
+Chaining, in general, works by sending a message to the method on the
+returned object.
+
+Example: `"Foo".downcase.reverse => "oof"`
+
+* `downcase` returns a String object
+* `reverse` is called on the String object returned from `downcase`
+
+### Why chaining scopes works
+
+`QueryMethods`, from
+[ActiveRecord::Relation (Arel)](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation/query_methods.rb) return Arel objects.
+
 
 # Some RSpec
 
@@ -269,7 +284,7 @@ ARel, from the `all` method.
 ~~~~
 @@@ ruby
 it "finds the pet cats" do
-  expect(Animal.pets.is("cat").pluck(:name)).to include "Wheezie"
+  expect(Animal.pets.by_kind("cat").pluck(:name)).to include "Wheezie"
 end
 ~~~~
 
@@ -312,7 +327,7 @@ class Animal < ActiveRecord::Base
 ~~~~
 @@@ ruby
 it "finds the pet cats by kind and role" do
-  expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+  expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
 end
 ~~~~
 
@@ -324,7 +339,7 @@ end
 ~~~~
 @@@ ruby
 it "finds the pet cats by role and kind" do
-  expect(Animal.by_role('pet').is('cat').pluck(:name)).to include "Wheezie"
+  expect(Animal.by_role('pet').by_kind('cat').pluck(:name)).to include "Wheezie"
 end
 ~~~~
 
@@ -341,7 +356,7 @@ it "finds all the angus" do
 end
 ~~~~
 
-# One of the herd...
+# One of the Angus herd...
 
 ![Angus bull](/images/black_angus_bull.jpg)
 
