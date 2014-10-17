@@ -16,9 +16,25 @@ Verify everything for yourself!
 
 (Don't just take my word for it.)
 
+# Personal motivation
+
+We're moving a lot of data out of Postgres and into Cassandra,
+hence we lose all our ActiveRecord goodies.
+
+This talk was conceived to better understand...
+
+### ...wrapping non-relational data.
+
+Specifically, how much could I leverage Rails patterns
+for NoSQL tools?
+
+The answer to that is still open, but there is plenty
+of tasty Rails treats here.
+
 # The view from 80,000 feet
 
 ![Blackbird can see you](/images/sr71.jpg)
+
 
 # Why ActiveRecord scopes?
 
@@ -283,11 +299,11 @@ we get something like this:
 
 ~~~~
 @@@ ruby
-def self.by_role role
-  if role.present?
-    where(role: role)
+def self.by_kind kind
+  if kind.present?
+    where(kind: kind)
   else
-    all
+    all # return arel when kind.nil?
   end
 end
 ~~~~
@@ -298,8 +314,8 @@ But that's nasty, don't you think? Let's do it
 
 ~~~~
 @@@ ruby
-def self.by_role role
-  where(role: role) if role.present? or all
+def self.by_kind kind
+  where(kind: kind) if kind.present? or all
 end
 ~~~~
 
@@ -410,23 +426,18 @@ end
 
 [Photo credit](https://www.flickr.com/photos/brittgow/4782264442/in/photolist-8hAmBd-fWf4Sm-sBhqy-5NLJ75-df1qdX-9QwH67-fURhtT-5GfGPx-oc1RyS-9m1mgj-dyNvbc-9m1m25-dNsw61-9kXfqR-9kXg3P-nQDLMo-ofDppd-fUR3MY-beB9hM-obrYGd-9m1mCy-cDJdLQ-fa6wzB-9m1mkd-odWovP-5NGpo6-7XVsMj-odYJyu-nWxY11-eXrc1F-eNaDtB-m6JPhL-fTwUP-69MC3M-eXrcEe-eXrFQF-eXrETt-5PyTxq-eXrdnk-9wxgb-4suVzj-eXCGkA-nZvHY1-96VcgL-jneb5P-5v15n6-4sa5qJ-5v15aM-5MPgif-5NGrYx)
 
-# How Arel works
-
-TODO: some modest digging through the Rails source to figure
-out the central conceit of the Arel design. Already know it
-has to return a compatible class, but that class is built
-(defined) on the fly.
+# How about "AnRel" (Active Non-Relation)
 
 Is there any way to generalize this to non-relational
 database queries?
 
 ### AnRel
 
-"Active Non-Relation"
 
 Create a wrapper around the query structure of the non-relational
 system, ensure whatever replaces `scope` returns the non-relation
 on every call.
+
 
 # Caveats
 
