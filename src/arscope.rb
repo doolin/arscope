@@ -205,28 +205,28 @@ describe Animal do
   end
 
   it "finds the pet cats" do
-    expect(Animal.pets.is("cat").pluck(:name)).to include "Wheezie"
+    expect(Animal.pets.by_kind("cat").pluck(:name)).to include "Wheezie"
   end
 
   it "finds the pet cats by kind and role" do
-    expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+    expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
   end
 
   it "finds the pet cats by role and kind" do
-    expect(Animal.by_role('pet').is("cat").pluck(:name)).to include "Wheezie"
+    expect(Animal.by_role('pet').by_kind("cat").pluck(:name)).to include "Wheezie"
   end
 
   it "finds all the cats and their roles" do
-    cats = Animal.is('cat').by_role('pet').to_sql#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role('pet').to_sql#.pluck(:name)
     puts cats.inspect
-    cats = Animal.is('cat').by_role('').to_sql#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role('').to_sql#.pluck(:name)
     puts cats.inspect
-    cats = Animal.is('cat').by_role(nil).to_sql#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role(nil).to_sql#.pluck(:name)
     puts cats.inspect
-    cats = Animal.is('cat').by_role(nil)#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role(nil)#.pluck(:name)
     puts cats.inspect
     puts Animal.by_role('working').to_sql
-    expect(Animal.is('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+    expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
   end
 
   it "finds all the angus" do

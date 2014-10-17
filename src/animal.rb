@@ -16,7 +16,7 @@ class Animal < ActiveRecord::Base
 
   ##  Why can't we use 'type' here?
   #scope :is, -> (kind) { where(type: kind) }
-  scope :is, -> (kind) { where(kind: kind) }
+  scope :by_kind, -> (kind) { where(kind: kind) }
 
   scope :by_name, -> (n) { where(name: n) }
 

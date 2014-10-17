@@ -385,7 +385,7 @@ class Animal < ActiveRecord::Base
 
 # Scope-to-class method chaining
 
-* Scope: `is`
+* Scope: `by_kind`
 * Class method: `by_role`
 
 ~~~~
@@ -398,7 +398,7 @@ end
 # Class method-to-scope chaining
 
 * Class method: `by_role`
-* Scope: `is`
+* Scope: `by_kind`
 
 ~~~~
 @@@ ruby
