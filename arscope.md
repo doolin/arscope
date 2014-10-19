@@ -566,6 +566,28 @@ for digging deeper:
     end
   end
 
+# `all`
+
+~~~~
+@@@ ruby
+  # Returns an <tt>ActiveRecord::Relation</tt> scope object.
+  # [snip snap]
+  # You can define a scope that applies to all finders using
+  # <tt>ActiveRecord::Base.default_scope</tt>.
+  def all
+    if current_scope
+      current_scope.clone
+    else
+      default_scoped
+    end
+  end
+
+  def default_scoped # :nodoc:
+    relation.merge(build_default_scope)
+  end
+~~~~
+
+
 # How to name ActiveRecord scopes
 
 Name scopes for the state they describe.
