@@ -471,6 +471,9 @@ for digging deeper:
 * [Rails named scope
   definition](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb)
   can't go wrong with source code.
+* [`blank` and
+  `present?`](http://guides.rubyonrails.org/active_support_core_extensions.html#blank-questionmark-and-present-questionmark) from the Ruby on Rails Guide.
+* [`blank` and `present?`](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/object/blank.rb) from the Rails source code.
 * [`dangerous_class_method?`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_methods.rb#L148), more source.
 
 # Appendix
