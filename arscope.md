@@ -58,9 +58,9 @@ scope works.
 * (Personal goal) structure and formatting of talk for
   content reuse. That is, can this talk be delivered on a Kindle?
 
-# Review, semantic convenience
+# Review: `scope` definition
 
-Name scopes for the state they describe.
+The method definition of scope has 3 parts.
 
 ~~~~
 @@@ ruby
@@ -79,6 +79,62 @@ def scope(name, body, &block)
     scope || all
   end
 end
+~~~~
+
+# 3 part definition
+
+1. check for existing scope name
+2. build scope extension if block present
+3. define the scope as a class method on the current ActiveRecord model.
+
+# Scary! `dangerous_class_method?`
+
+### (scope def. part 1)
+
+First order of business: has a scope by this name already been defined,
+or does is the scope name a reserved words?
+
+Reserved words, can't name a scope any of these:
+
+~~~~
+@@@ ruby
+  # active_record/scoping/named.rb:142
+  if dangerous_class_method?(name)
+    raise ArgumentError, "Already defined scope"
+  end
+~~~~
+
+### Did you know?
+
+This presentation has an Appendix, where you can find the definition of
+`dangerous_class_method?`.
+
+# Define scope extension
+
+### (scope def. part 2)
+
+~~~~
+@@@ ruby
+  # active_record/scoping/named.rb:148
+  extension = Module.new(&block) if block
+~~~~
+
+Apparently, few people have heard of scope extensions, and fewer seem to
+use them.
+
+# Define scope as class method
+
+### (scope def. part 3)
+
+~~~~
+@@@ ruby
+  # active_record/scoping/named.rb:150
+  singleton_class.send(:define_method, name) do |*args|
+    scope = all.scoping { body.call(*args) }
+    scope = scope.extending(extension) if extension
+
+    scope || all
+  end
 ~~~~
 
 # Review: scopes help generate queries
@@ -506,3 +562,7 @@ for digging deeper:
       false
     end
   end
+
+# How to name ActiveRecord scopes
+
+Name scopes for the state they describe.
