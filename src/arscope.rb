@@ -129,7 +129,7 @@ i1 = Animal.new :name => "animal 1"
 
 o2 = Farm.new :name => "farm 2"
 i2 = Animal.new :name => "animal 2"
-i2.save
+#i2.save
 
 o3 = Farm.new :name => "farm 3"
 o3.save
@@ -197,6 +197,7 @@ describe Animal do
     expect(Animal.foo.bar.first.weight).to eq 42.13
   end
 
+=begin
   # Set this up to test the scopes first.
   # Testing scopes is important when replacing AR.
   it "handles non-existent attributes" do
@@ -215,8 +216,24 @@ describe Animal do
   it "finds the pet cats by role and kind" do
     expect(Animal.by_role('pet').by_kind("cat").pluck(:name)).to include "Wheezie"
   end
+=end
 
-  it "finds all the cats and their roles" do
+  it "does stuff with the breed class method" do
+    puts Animal.by_breed("maine coon").to_sql
+  end
+
+  # In this case, Shredder the pet goat has no breed specified.
+  it "does stuff with the breed class method empty string" do
+    puts Animal.by_breed("").to_sql
+    expect(Animal.by_breed('').size).to eq 1
+  end
+
+  it "does stuff with the breed class method passed a nil" do
+    puts Animal.by_breed(nil).to_sql
+    expect(Animal.by_breed(nil).pluck(:kind)).to include "mule"
+  end
+
+  xit "finds all the cats and their roles" do
     cats = Animal.by_kind('cat').by_role('pet').to_sql#.pluck(:name)
     puts cats.inspect
     cats = Animal.by_kind('cat').by_role('').to_sql#.pluck(:name)
