@@ -19,11 +19,14 @@ Verify everything for yourself!
 # Personal motivation
 
 We're moving a lot of data out of Postgres and into Cassandra,
-hence we lose all our ActiveRecord goodies.
+hence we lose all our ActiveRecord goodies , for example, the
+`scope` method.
 
-This talk was conceived to better understand...
+### But we still to do everything the scopes were doing
 
-### ...wrapping non-relational data.
+A necessary first step:
+
+## change scopes into class methods
 
 Specifically, how much could I leverage Rails patterns
 for NoSQL tools?
