@@ -9,7 +9,7 @@ class Animal < ActiveRecord::Base
 
   scope :needs_vet, -> { where("last_vet < ?", 1.year.ago) }
 
-  scope :pets, -> { where(role: 'pet') } { x = 4 }
+  scope :pets, -> { where(role: 'pet') }
 
   #scope :bar, -> { where(name: "animal 4") }
   #scope :bar, -> { where(name: "animal 4") }
@@ -20,6 +20,8 @@ class Animal < ActiveRecord::Base
 
   scope :by_name, -> (n) { where(name: n) }
 
+  #scope :by_breed, -> (breed) { where(breed: breed) if breed.present? }
+
   def self.working
     where(kind: 'working')
   end
@@ -29,8 +31,10 @@ class Animal < ActiveRecord::Base
     where(kind: 'show')
   end
 
+  # Check behavior of the following against the scope above.
+  # Something isn't quite right.
   def self.by_breed breed
-    where(breed: breed)
+    where(breed: breed) if breed.present? or all
   end
 
   def self.by_role role

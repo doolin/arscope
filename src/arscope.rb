@@ -224,7 +224,7 @@ describe Animal do
 
   # In this case, Shredder the pet goat has no breed specified.
   it "does stuff with the breed class method empty string" do
-    puts Animal.by_breed("").to_sql
+    puts Animal.by_breed('').to_sql
     expect(Animal.by_breed('').size).to eq 1
   end
 
