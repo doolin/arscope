@@ -67,21 +67,21 @@ The method definition of scope has 3 parts.
 
 ~~~~
 @@@ ruby
-\# activerecord/lib/active_record/scoping/named.rb
-def scope(name, body, &block)
-  if dangerous_class_method?(name)
-    raise ArgumentError, "Already defined scope"
+  # activerecord/lib/active_record/scoping/named.rb
+  def scope(name, body, &block)
+    if dangerous_class_method?(name)
+      raise ArgumentError, "Already defined scope"
+    end
+
+    extension = Module.new(&block) if block
+
+    singleton_class.send(:define_method, name) do |*args|
+      scope = all.scoping { body.call(*args) }
+      scope = scope.extending(extension) if extension
+
+      scope || all
+    end
   end
-
-  extension = Module.new(&block) if block
-
-  singleton_class.send(:define_method, name) do |*args|
-    scope = all.scoping { body.call(*args) }
-    scope = scope.extending(extension) if extension
-
-    scope || all
-  end
-end
 ~~~~
 
 # 3 part definition
@@ -352,31 +352,17 @@ end
 
 # Replace scope with class method
 
-
 From Blogistan, for replacing a scope with a class method,
 we get something like this:
 
 ~~~~
 @@@ ruby
 def self.by_kind kind
-  if kind.present?
     where(kind: kind)
-  else
-    all # return arel when kind.nil?
-  end
 end
 ~~~~
 
-But that's nasty, don't you think? Let's do it
-
-### Ruby style:
-
-~~~~
-@@@ ruby
-def self.by_kind kind
-  where(kind: kind) if kind.present? or all
-end
-~~~~
+It's that simple.
 
 
 # Why chaining works
@@ -585,6 +571,68 @@ for digging deeper:
   def default_scoped # :nodoc:
     relation.merge(build_default_scope)
   end
+~~~~
+
+
+# When `nil` and `blank` matter
+
+From Blogistan, for replacing a scope with a class method,
+we get something like this:
+
+~~~~
+@@@ ruby
+def self.by_kind kind
+  if kind.present?
+    where(kind: kind)
+  else
+    all # return arel when kind.nil?
+  end
+end
+~~~~
+
+But that's nasty, don't you think? Let's do it
+
+### Ruby style:
+
+~~~~
+@@@ ruby
+def self.by_kind kind
+  where(kind: kind) if kind.present? or all
+end
+~~~~
+
+# Extending class methods
+
+Just as scopes can be extended, so can class methods:
+
+Platformatec demonstrates how this is done using the `kaminari`
+pagination gem:
+
+~~~~
+@@@ ruby
+def self.page(num)
+  scope = # some limit + offset logic here for pagination
+  scope.extend PaginationExtensions
+  scope
+end
+
+module PaginationExtensions
+  def per(num)
+    # more logic here
+  end
+
+  def total_pages
+    # some more here
+  end
+
+  def first_page?
+    # and a bit more
+  end
+
+  def last_page?
+    # and so on
+  end
+end
 ~~~~
 
 
