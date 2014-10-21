@@ -20,6 +20,8 @@ class Animal < ActiveRecord::Base
 
   scope :by_name, -> (n) { where(name: n) }
 
+  scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
+
   #scope :by_breed, -> (breed) { where(breed: breed) if breed.present? }
 
   def self.working
