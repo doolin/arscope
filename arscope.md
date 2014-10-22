@@ -519,9 +519,41 @@ connection (`rails db`).
 
 Sans Rails, just fire up a database client.
 
+Either way, paste in the result of `to_sql` on the scope and
+see what the database thinks about it.
+
 ### And so are scope tests!
 
+~~~~
+@@@ ruby
+Failure/Error: expect(Animal.badscope).not_to be_empty
+     ActiveRecord::StatementInvalid:
+       SQLite3::SQLException: no such column: date.now.to_i: SELECT
+COUNT(*) FROM "animals"  WHERE (1413985311 - date.now.to_i > max_value)
+~~~~
 
+# Testing a scope with RSpec
+
+~~~~
+@@@ ruby
+  it "fails bad scope definition on wacko (invalid) sql" do
+    # Uncomment this to acquire failure specifics.
+    # expect(Animal.badscope).not_to be_empty
+    # We need to force an evaluation, `puts` its convenient.
+    # (This is a good segue into lazy evaluation.)
+    expect {
+      puts Animal.badscope
+    }.to raise_error(ActiveRecord::StatementInvalid)
+  end
+~~~~
+
+## Summarizing
+
+As web programmers, we're polyglot, we have to program competently in
+several programming languages every day.
+
+The upshot here: when I've been looking at Ruby all day long, sometimes
+shifting gears into SQL doesn't.
 
 # How about "AnRel" (Active Non-Relation)
 
