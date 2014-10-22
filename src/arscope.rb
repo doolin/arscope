@@ -264,11 +264,14 @@ describe Animal do
   end
 
   it "fails on wacko sql" do
-    #Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
-    # Make a note that "fail" probably can't be used.
-    #Animal.scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
-    #puts Animal.badscope.to_sql
+    # Animal.scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
+
+    # Uncomment this to acquire failure specifics.
+    # expect(Animal.badscope).not_to be_empty
+
+    # puts Animal.badscope.to_sql
     # We need to force an evaluation, `puts` its convenient.
+    # (This is a good segue into lazy evaluation.)
     expect {
       puts Animal.badscope
     }.to raise_error(ActiveRecord::StatementInvalid)
