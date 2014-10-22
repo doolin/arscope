@@ -478,17 +478,50 @@ It's not hard to blunder in scope definitions.
 One favorite way of mine is mixing Ruby with SQL.
 
 ActiveRecord is perfectly happy to define perfectly invalid SQL,
-which leaves debugging up to us.
+which leaves debugging up to us Rubyists.
 
 Consider the following:
 
 ~~~~
 @@@ ruby
-
-  scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
+  scope :badscope, -> { where("? - Date.now.to_i > max_value", Time.now.utc.to_i) }
 ~~~~
 
-Looks perfectly reasonable...at first glance.
+### Looks perfectly reasonable...at first glance.
+
+Even the SQL looks somewhat reasonable:
+
+~~~~
+@@@ sql
+SELECT "animals".* FROM "animals"  WHERE (1413899468 - Date.now.to_i > max_value)
+~~~~
+
+
+# Let's see what the database has to say...
+
+~~~~
+@@@ sql
+sqlite> SELECT "animals".* FROM "animals"  WHERE (1413899468 - date.now.to_i > max_value);
+Error: no such column: date.now.to_i
+~~~~
+
+### Ha ha.
+
+You think it's funny now (and it is), but spend a couple of hours at the
+end of the week trying to figure out why your *Rails* application isn't
+working.
+
+
+# REPL is your friend
+
+You can test these out in Rails console, or open up a database
+connection (`rails db`).
+
+Sans Rails, just fire up a database client.
+
+### And so are scope tests!
+
+
 
 # How about "AnRel" (Active Non-Relation)
 
