@@ -125,6 +125,8 @@ This presentation has an Appendix, where you can find the definition of
 Apparently, few people have heard of scope extensions, and fewer seem to
 use them.
 
+We'll return to scope extensions later.
+
 # Define scope as class method
 
 ### (scope def. part 3)
@@ -183,13 +185,12 @@ But we can write a driver file named `arscope.rb`.
 
 ~~~~
 @@@ ruby
-#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-include 'active_record'
-include 'active_support'
-include 'logger'
-include 'rspec'
-
+  include 'active_record'
+  include 'active_support'
+  include 'logger'
+  include 'rspec'
 ~~~~
 
 Since we're interested in scopes, which are ActiveRecord methods,
@@ -201,28 +202,28 @@ Let's create a file, `connection.rb`, with the following code:
 
 ~~~~
 @@@ ruby
-DB_SPEC = {
-  adapter: "sqlite3",
-  database: "scope.sqlite3",
-  pool: 5,
-  timeout: 5000
-}
+  DB_SPEC = {
+    adapter: "sqlite3",
+    database: "scope.sqlite3",
+    pool: 5,
+    timeout: 5000
+  }
 
-ActiveRecord::Base.establish_connection(DB_SPEC)
+  ActiveRecord::Base.establish_connection(DB_SPEC)
 ~~~~
 
 Now we load it....
 
 ~~~~
 @@@ ruby
-#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-include 'active_record'
-include 'active_support'
-include 'logger'
-include 'rspec'
+  include 'active_record'
+  include 'active_support'
+  include 'logger'
+  include 'rspec'
 
-load './connection.rb'
+  load './connection.rb'
 ~~~~
 
 # Example domain: Farm
@@ -267,15 +268,15 @@ We might add more migrations later, but they won't fit on the slide.
 
 ~~~~
 @@@ ruby
-#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-include 'active_record'
-include 'active_support'
-include 'logger'
-include 'rspec'
+  include 'active_record'
+  include 'active_support'
+  include 'logger'
+  include 'rspec'
 
-load './connection.rb'
-load './migrations.rb'
+  load './connection.rb'
+  load './migrations.rb'
 ~~~~
 
 
@@ -330,23 +331,23 @@ because it's useful for demonstrating behavior.
 
 ~~~~
 @@@ ruby
-#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-include 'active_record'
-include 'active_support'
-include 'logger'
-include 'rspec'
+  include 'active_record'
+  include 'active_support'
+  include 'logger'
+  include 'rspec'
 
-load './connection.rb'
-load './migrations.rb'
-load './animal.rb'
+  load './connection.rb'
+  load './migrations.rb'
+  load './animal.rb'
 
-describe Animal do
-  before(:all) { require './seed' }
-  it "finds the pets" do
-    expect(Animal.pets.count).to eq 2
+  describe Animal do
+    before(:all) { require './seed' }
+    it "finds the pets" do
+      expect(Animal.pets.count).to eq 2
+    end
   end
-end
 ~~~~
 
 
@@ -470,6 +471,22 @@ end
 ![Angus bull](/images/black_angus_bull.jpg)
 
 [Photo credit](https://www.flickr.com/photos/brittgow/4782264442/in/photolist-8hAmBd-fWf4Sm-sBhqy-5NLJ75-df1qdX-9QwH67-fURhtT-5GfGPx-oc1RyS-9m1mgj-dyNvbc-9m1m25-dNsw61-9kXfqR-9kXg3P-nQDLMo-ofDppd-fUR3MY-beB9hM-obrYGd-9m1mCy-cDJdLQ-fa6wzB-9m1mkd-odWovP-5NGpo6-7XVsMj-odYJyu-nWxY11-eXrc1F-eNaDtB-m6JPhL-fTwUP-69MC3M-eXrcEe-eXrFQF-eXrETt-5PyTxq-eXrdnk-9wxgb-4suVzj-eXCGkA-nZvHY1-96VcgL-jneb5P-5v15n6-4sa5qJ-5v15aM-5MPgif-5NGrYx)
+
+# Scope extensions
+
+First, question: Who in the audience is using scope extensions on a
+regular basis?
+
+Simple example:
+
+~~~~
+@@@ ruby
+
+scope :foo, -> { where(bar: 'baz') } do
+  def quux
+    'foobar'
+  end
+end
 
 # Debugging scopes
 

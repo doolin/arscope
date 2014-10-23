@@ -216,7 +216,6 @@ describe Animal do
   it "finds the pet cats by role and kind" do
     expect(Animal.by_role('pet').by_kind("cat").pluck(:name)).to include "Wheezie"
   end
-=end
 
   it "does stuff with the breed class method" do
     puts Animal.by_breed("maine coon").to_sql
@@ -256,11 +255,16 @@ describe Animal do
       Animal.scope :testem, -> { where(name: "animal 1") }
     }.not_to raise_error
   end
+=end
 
-  it "does not allow duplicate scope names" do
+  xit "does not allow duplicate scope names" do
     Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
     #expect { Animal.scope :utotem, -> { where(role: "working") } }.to raise_error ArgumentError
     #expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError
+  end
+
+  it "exercises a scope" do
+    expect(Animal.by_kind('dog').work('dog')).to eq 'herd'
   end
 
   it "fails on wacko sql" do
