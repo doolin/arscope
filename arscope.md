@@ -56,6 +56,7 @@ Two main reasons:
 scope works.
 * How chaining scopes works.
 * How class methods can chain with scopes.
+* How to control queries on parameter values.
 * Some tips for debugging scopes. (Hint: use `to_sql`)
 * When and why to pass blocks into scopes.
 * (Personal goal) structure and formatting of talk for
