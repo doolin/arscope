@@ -268,6 +268,10 @@ describe Animal do
   end
 
   it "exercises a scope" do
+    # work returns a string instead of a relation,
+    # next step is to see if it can return a relation
+    # and be chained.
+    #ap Animal.by_kind('dog').work('dog').to_sql
     expect(Animal.by_kind('dog').work('dog')).to eq 'herd'
   end
 
