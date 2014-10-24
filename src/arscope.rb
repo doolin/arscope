@@ -263,6 +263,10 @@ describe Animal do
     #expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError
   end
 
+  it "yields a block passed to a scope extension" do
+    expect(Animal.yielder.yieldit { "yielded" }).to eq "yielded"
+  end
+
   it "fails on wacko sql" do
     # Animal.scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
 

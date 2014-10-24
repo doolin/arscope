@@ -24,6 +24,12 @@ class Animal < ActiveRecord::Base
 
   #scope :by_breed, -> (breed) { where(breed: breed) if breed.present? }
 
+  scope :yielder, -> { where(breed: 'persion') } do
+    def yieldit
+      yield
+    end
+  end
+
   def self.working
     where(kind: 'working')
   end
