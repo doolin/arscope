@@ -676,6 +676,38 @@ for digging deeper:
 ~~~~
 
 
+# Controlling queries on parameterized scopes
+
+Consider the following definitions:
+
+~~~~
+@@@ ruby
+scope :by_kind, ->(k) { where(kind: k) }
+scope :by_role, ->(r) { where(role: r) }
+~~~~
+
+with query:
+
+~~~~
+@@@ ruby
+Animal.by_kind('cat').by_role('pet')
+~~~~
+
+which produces the follow SQL:
+
+~~~~
+@@@ sql
+SELECT * FROM animals  WHERE kind = 'cat' AND role = 'pet'
+~~~~
+
+# When parameter isn't `present?`
+
+~~~~
+@@@ sql
+SELECT * FROM animals WHERE kind = 'cat' AND role = ''
+
+SELECT * FROM animals  WHERE kind = 'cat' AND role IS NULL
+~~~~
 # When `nil` and `blank` matter
 
 From Blogistan, for replacing a scope with a class method,

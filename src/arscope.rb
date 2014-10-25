@@ -231,8 +231,9 @@ describe Animal do
     puts Animal.by_breed(nil).to_sql
     expect(Animal.by_breed(nil).pluck(:kind)).to include "mule"
   end
+=end
 
-  xit "finds all the cats and their roles" do
+  it "finds all the cats and their roles" do
     cats = Animal.by_kind('cat').by_role('pet').to_sql#.pluck(:name)
     puts cats.inspect
     cats = Animal.by_kind('cat').by_role('').to_sql#.pluck(:name)
@@ -245,6 +246,7 @@ describe Animal do
     expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
   end
 
+=begin
   it "finds all the angus" do
     expect(Animal.by_role('stock').by_breed('angus').size).to eq 2
   end
@@ -257,17 +259,18 @@ describe Animal do
   end
 =end
 
+=begin
   xit "does not allow duplicate scope names" do
     Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
     #expect { Animal.scope :utotem, -> { where(role: "working") } }.to raise_error ArgumentError
     #expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError
   end
 
-  it "yields a block passed to a scope extension" do
+  xit "yields a block passed to a scope extension" do
     expect(Animal.yielder.yieldit { "yielded" }).to eq "yielded"
   end
 
-  it "exercises a scope" do
+  xit "exercises a scope" do
     # work returns a string instead of a relation,
     # next step is to see if it can return a relation
     # and be chained.
@@ -288,4 +291,5 @@ describe Animal do
       puts Animal.badscope
     }.to raise_error(ActiveRecord::StatementInvalid)
   end
+=end
 end
