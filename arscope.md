@@ -31,7 +31,7 @@ A necessary first step:
 Specifically, how much could I leverage Rails patterns
 for NoSQL tools?
 
-The answer to that is still open, but there is plenty
+The answer to that is still open, but there are plenty
 of tasty Rails treats here.
 
 # The view from 80,000 feet
@@ -54,7 +54,7 @@ Two main reasons:
 
 * Some understanding how the ActiveRecord implementation of
 scope works.
-* How chaining scopes works.
+* How scope chaining works.
 * How class methods can chain with scopes.
 * How to control queries on parameter values.
 * Some tips for debugging scopes. (Hint: use `to_sql`)
@@ -143,6 +143,22 @@ We'll return to scope extensions later.
   end
 ~~~~
 
+* `define_method` belongs to Ruby's [Module
+class](http://www.ruby-doc.org/core-2.1.3/Module.html#method-i-define_method).
+Here, we send the block to be used for the scope's
+method body.
+* `body` is the callback passed to the scope definition in the model
+* `extension` handles a block passed to the scope definition in the
+  model (we'll look at this in more detail later).
+
+# In even more detail...
+
+### `all.scoping`
+
+See the [method definition for
+`scoping`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation.rb#L301)
+in the Rails source at Github.
+
 # Review: scopes help generate queries
 
 What we really want to see here is the underlying SQL, using
@@ -157,7 +173,7 @@ class Animal
 end
 
 2.1.2 :001 > Animal.by_role('working').to_sql
- => "SELECT \"animals\".* FROM \"animals\"  WHERE \"animals\".\"role\" = 'working'"
+ => "SELECT animals.* FROM animals  WHERE animals.role = 'working'"
 ~~~~
 
 
