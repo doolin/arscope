@@ -638,6 +638,7 @@ for digging deeper:
   `present?`](http://guides.rubyonrails.org/active_support_core_extensions.html#blank-questionmark-and-present-questionmark) from the Ruby on Rails Guide.
 * [`blank` and `present?`](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/object/blank.rb) from the Rails source code.
 * [`dangerous_class_method?`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_methods.rb#L148), more source.
+* [Abstracting persistence in Rails](https://medium.com/@KamilLelonek/why-is-your-rails-application-still-coupled-to-activerecord-efe34d657c91)
 
 # Appendix
 
