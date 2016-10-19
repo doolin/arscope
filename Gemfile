@@ -6,11 +6,11 @@ gem 'thin'
 
 
 
-rv = '4.0.4'
+rv = '5.0.0.1'
 #rv = '4.0.0'
 gem 'rails', "#{rv}"
 
-gem 'protected_attributes'
+# gem 'protected_attributes'
 
 #gem 'activerecord', "#{rv}"
 #gem 'actionpack', "#{rv}"
