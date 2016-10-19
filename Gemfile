@@ -16,13 +16,13 @@ gem 'protected_attributes'
 #gem 'actionpack', "#{rv}"
 #gem 'activesupport', "#{rv}"
 
-gem 'ransack'
+# gem 'ransack'
 gem 'rspec'
 gem 'rspec-rails'
 gem 'sqlite3'
 gem 'awesome_print'
 gem 'pry-nav'
-gem 'seeing_is_believing'
+# gem 'seeing_is_believing'
 gem 'yard'
 gem 'ap'
 
