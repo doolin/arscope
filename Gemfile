@@ -6,7 +6,7 @@ gem 'thin'
 
 
 
-rv = '5.0.0.1'
+rv = '5.1.0.rc1'
 #rv = '4.0.0'
 gem 'rails', "#{rv}"
 
