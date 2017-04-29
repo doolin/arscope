@@ -2,7 +2,7 @@
 
 require 'active_record'
 require 'active_support'
-require 'protected_attributes'
+# require 'protected_attributes'
 require 'logger'
 require 'rspec'
 require 'ap'
