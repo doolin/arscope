@@ -1,4 +1,4 @@
-class Farms < ActiveRecord::Migration
+class Farms < ActiveRecord::Migration[5.1]
   def self.up
     create_table :farms do |t|
       t.string :name
@@ -16,7 +16,7 @@ unless Farms.table_exists?(:farms)
   ActiveRecord::Migrator.migrate(Farms.up)
 end
 
-class Animals < ActiveRecord::Migration
+class Animals < ActiveRecord::Migration[5.1]
   def self.up
     create_table :animals do |t|
       t.integer :farm_id
