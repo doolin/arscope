@@ -7,14 +7,13 @@ class Farms < ActiveRecord::Migration[5.1]
       t.timestamp
     end
   end
+
   def self.down
     drop_table :farms
   end
 end
 
-unless Farms.table_exists?(:farms)
-  ActiveRecord::Migrator.migrate(Farms.up)
-end
+ActiveRecord::Migrator.migrate(Farms.up) unless Farms.table_exists?(:farms)
 
 class Animals < ActiveRecord::Migration[5.1]
   def self.up
@@ -31,6 +30,7 @@ class Animals < ActiveRecord::Migration[5.1]
       t.timestamp
     end
   end
+
   def self.down
     drop_table :animals
   end
@@ -40,20 +40,18 @@ unless Animals.table_exists?(:animals)
   ActiveRecord::Migrator.migrate(Animals.up)
 end
 
-=begin
-class LocalScopers < ActiveRecord::Migration
-  def self.up
-    create_table :local_scopers do |t|
-      t.string :name
-      t.timestamp
-    end
-  end
-  def self.down
-    drop_table :local_scopers
-  end
-end
-=end
+# class LocalScopers < ActiveRecord::Migration
+#   def self.up
+#     create_table :local_scopers do |t|
+#       t.string :name
+#       t.timestamp
+#     end
+#   end
+#   def self.down
+#     drop_table :local_scopers
+#   end
+# end
 
-#unless LocalScopers.table_exists?(:local_scopers)
+# unless LocalScopers.table_exists?(:local_scopers)
 #  ActiveRecord::Migrator.migrate(LocalScopers.up)
-#end
+# end
