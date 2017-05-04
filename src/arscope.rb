@@ -5,12 +5,12 @@ require 'active_support'
 require 'logger'
 require 'rspec'
 require 'pry-nav'
-#require 'ap'
+# require 'ap'
 
 #####
 ####  Rails scopes are class methods invoked by instances.
 
-#Create a class with a scope and a class method and chain the two of them together.
+# Create a class with a scope and a class method and chain the two of them together.
 # http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/
 
 # WHY:
@@ -60,9 +60,8 @@ require 'pry-nav'
 # to_sql on scopes, or more precisely, the arel returned?
 
 ActiveSupport::Inflector.inflections do |inflect|
-  inflect.plural "animal", "animals"
+  inflect.plural 'animal', 'animals'
 end
-
 
 load './connection.rb'
 load './migrations.rb'
@@ -74,28 +73,25 @@ load './migrations.rb'
 #   module Scoping
 #     module Named
 module LocalScoper
-  def my_method_missing arg1, arg2
-    #puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
+  def my_method_missing(arg1, arg2)
+    # puts "#{__FILE__} #{__LINE__} LocalScoper method_missing..."
     ap "Method #{arg1} with #{arg2} is missing"
-    #nil
+    # nil
   end
 
   # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb
   # define method_missing to get this working for now.
   def my_scope(name, body, &block)
+    #     ret_val = dangerous_class_method?(name)
+    #     ap "#{__FILE__} #{__LINE__} ret_val: #{ret_val.class}"
+    #
+    #     if dangerous_class_method?(name)
+    #       raise ArgumentError, "You tried to define a scope named \"#{name}\" " \
+    #         "on the model \"#{self.name}\", but Active Record already defined " \
+    #         "a class method with the same name."
+    #     end
 
-=begin
-    ret_val = dangerous_class_method?(name)
-    ap "#{__FILE__} #{__LINE__} ret_val: #{ret_val.class}"
-
-    if dangerous_class_method?(name)
-      raise ArgumentError, "You tried to define a scope named \"#{name}\" " \
-        "on the model \"#{self.name}\", but Active Record already defined " \
-        "a class method with the same name."
-    end
-=end
-
-    #ap "From LocalScoper"
+    # ap "From LocalScoper"
 
     extension = Module.new(&block) if block
 
@@ -111,185 +107,176 @@ end
 class Farm < ActiveRecord::Base
   has_many :animals
 
-  scope :long, -> { where("length > 1000") }
+  scope :long, -> { where('length > 1000') }
 end
 
-puts "before loading animal"
+puts 'before loading animal'
 load './animal.rb'
-puts "after loading animal"
+puts 'after loading animal'
 
 # http://guides.rubyonrails.org/initialization.html
 
 # Assign an object to a has_one association in an existing object,
 # that associated object will be saved.
 # Read from p. 323 in Agile 3rd Edition on CRUD.
-o1 = Farm.create :name => "farm 1"
-i1 = Animal.new :name => "animal 1"
-#o1.animals = [i1]
+o1 = Farm.create name: 'farm 1'
+i1 = Animal.new name: 'animal 1'
+# o1.animals = [i1]
 
-o2 = Farm.new :name => "farm 2"
-i2 = Animal.new :name => "animal 2"
-#i2.save
+o2 = Farm.new name: 'farm 2'
+i2 = Animal.new name: 'animal 2'
+# i2.save
 
-o3 = Farm.new :name => "farm 3"
+o3 = Farm.new name: 'farm 3'
 o3.save
 
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
-o4 = Farm.new :name => "farm 4"
-i4 = Animal.new :name => "animal 5", weight: 42.13
-#o4.animal = i4
+o4 = Farm.new name: 'farm 4'
+i4 = Animal.new name: 'animal 5', weight: 42.13
+# o4.animal = i4
 
-#ActiveRecord::Base.logger = Logger.new(STDOUT)
+# ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
-    c.syntax = [:should, :expect]
+    c.syntax = %i[should expect]
   end
 end
 
 describe Animal do
-
   let(:animal) { Animal.new }
 
-=begin
-  before :all do
-    # Nasty kludge. You can do better than this.
-    require './seed'
-  end
-=end
+  #   before :all do
+  #     # Nasty kludge. You can do better than this.
+  #     require './seed'
+  #   end
 
   before(:all) { require './seed' }
 
-  it "new animal should be valid" do
+  it 'new animal should be valid' do
     animal.should be_valid
   end
 
-  it "it finds the pets" do
+  it 'it finds the pets' do
     expect(Animal.pets.count).to eq 2
   end
 
-  it "finds no show animals which need the vet" do
+  it 'finds no show animals which need the vet' do
     expect(Animal.show.needs_vet.count).to eq 0
   end
 
-  it "it finds overdue for vet" do
-    #binding.pry
+  it 'it finds overdue for vet' do
+    # binding.pry
     expect(Animal.needs_vet.count).to eq 4
   end
 
-  it "finds the pet for a vet" do
+  it 'finds the pet for a vet' do
     expect(Animal.pets.needs_vet.count).to eq 1
   end
 
-  it "makes a scope" do
+  it 'makes a scope' do
     ## Put this on a slide
-    Animal.scope("foo", -> {}) # { "quux" }
+    Animal.scope('foo', -> {}) # { "quux" }
     expect(Animal.foo.count).to be >= 0
     Animal.methods.should  include :foo
   end
 
   # Need to load an animal in the db such that this test passes.
   # Experiment with defining the scopes on the fly in the test.
-  xit "chains two scopes" do
-    #expect(animal.foo.bar.first.amount).to eq 42.13
-    Animal.create :name => "animal 4", weight: 42.13
+  xit 'chains two scopes' do
+    # expect(animal.foo.bar.first.amount).to eq 42.13
+    Animal.create name: 'animal 4', weight: 42.13
     expect(Animal.foo.bar.first.weight).to eq 42.13
   end
 
-=begin
-  # Set this up to test the scopes first.
-  # Testing scopes is important when replacing AR.
-  it "handles non-existent attributes" do
-    #puts Animal.by_role("working").by_name("Bessie").inspect
-    expect(Animal.by_role("working").by_name("Bessie").first.name).to eq "Bessie"
-  end
+  #   # Set this up to test the scopes first.
+  #   # Testing scopes is important when replacing AR.
+  #   it "handles non-existent attributes" do
+  #     #puts Animal.by_role("working").by_name("Bessie").inspect
+  #     expect(Animal.by_role("working").by_name("Bessie").first.name).to eq "Bessie"
+  #   end
+  #
+  #   it "finds the pet cats" do
+  #     expect(Animal.pets.by_kind("cat").pluck(:name)).to include "Wheezie"
+  #   end
+  #
+  #   it "finds the pet cats by kind and role" do
+  #     expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+  #   end
+  #
+  #   it "finds the pet cats by role and kind" do
+  #     expect(Animal.by_role('pet').by_kind("cat").pluck(:name)).to include "Wheezie"
+  #   end
+  #
+  #   it "does stuff with the breed class method" do
+  #     puts Animal.by_breed("maine coon").to_sql
+  #   end
+  #
+  #   # In this case, Shredder the pet goat has no breed specified.
+  #   it "does stuff with the breed class method empty string" do
+  #     puts Animal.by_breed('').to_sql
+  #     expect(Animal.by_breed('').size).to eq 1
+  #   end
+  #
+  #   it "does stuff with the breed class method passed a nil" do
+  #     puts Animal.by_breed(nil).to_sql
+  #     expect(Animal.by_breed(nil).pluck(:kind)).to include "mule"
+  #   end
 
-  it "finds the pet cats" do
-    expect(Animal.pets.by_kind("cat").pluck(:name)).to include "Wheezie"
-  end
-
-  it "finds the pet cats by kind and role" do
-    expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
-  end
-
-  it "finds the pet cats by role and kind" do
-    expect(Animal.by_role('pet').by_kind("cat").pluck(:name)).to include "Wheezie"
-  end
-
-  it "does stuff with the breed class method" do
-    puts Animal.by_breed("maine coon").to_sql
-  end
-
-  # In this case, Shredder the pet goat has no breed specified.
-  it "does stuff with the breed class method empty string" do
-    puts Animal.by_breed('').to_sql
-    expect(Animal.by_breed('').size).to eq 1
-  end
-
-  it "does stuff with the breed class method passed a nil" do
-    puts Animal.by_breed(nil).to_sql
-    expect(Animal.by_breed(nil).pluck(:kind)).to include "mule"
-  end
-=end
-
-  it "finds all the cats and their roles" do
-    cats = Animal.by_kind('cat').by_role('pet').to_sql#.pluck(:name)
+  it 'finds all the cats and their roles' do
+    cats = Animal.by_kind('cat').by_role('pet').to_sql # .pluck(:name)
     puts cats.inspect
-    cats = Animal.by_kind('cat').by_role('').to_sql#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role('').to_sql # .pluck(:name)
     puts cats.inspect
-    cats = Animal.by_kind('cat').by_role(nil).to_sql#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role(nil).to_sql # .pluck(:name)
     puts cats.inspect
-    cats = Animal.by_kind('cat').by_role(nil)#.pluck(:name)
+    cats = Animal.by_kind('cat').by_role(nil) # .pluck(:name)
     puts cats.inspect
     puts Animal.by_role('working').to_sql
-    expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
+    expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include 'Wheezie'
   end
 
-=begin
-  it "finds all the angus" do
-    expect(Animal.by_role('stock').by_breed('angus').size).to eq 2
-  end
+  #   it "finds all the angus" do
+  #     expect(Animal.by_role('stock').by_breed('angus').size).to eq 2
+  #   end
+  #
+  #   it "silently allows duplicate scope definitions" do
+  #     Animal.scope :testem, -> { where(name: "animal 1") } #{ puts "foo" }
+  #     expect {
+  #       Animal.scope :testem, -> { where(name: "animal 1") }
+  #     }.not_to raise_error
+  #   end
 
-  it "silently allows duplicate scope definitions" do
-    Animal.scope :testem, -> { where(name: "animal 1") } #{ puts "foo" }
-    expect {
-      Animal.scope :testem, -> { where(name: "animal 1") }
-    }.not_to raise_error
-  end
-=end
-
-=begin
-  xit "does not allow duplicate scope names" do
-    Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
-    #expect { Animal.scope :utotem, -> { where(role: "working") } }.to raise_error ArgumentError
-    #expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError
-  end
-
-  xit "yields a block passed to a scope extension" do
-    expect(Animal.yielder.yieldit { "yielded" }).to eq "yielded"
-  end
-
-  xit "exercises a scope" do
-    # work returns a string instead of a relation,
-    # next step is to see if it can return a relation
-    # and be chained.
-    #ap Animal.by_kind('dog').work('dog').to_sql
-    expect(Animal.by_kind('dog').work('dog')).to eq 'herd'
-  end
-
-  it "fails on wacko sql" do
-    # Animal.scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
-
-    # Uncomment this to acquire failure specifics.
-    # expect(Animal.badscope).not_to be_empty
-
-    # puts Animal.badscope.to_sql
-    # We need to force an evaluation, `puts` its convenient.
-    # (This is a good segue into lazy evaluation.)
-    expect {
-      puts Animal.badscope
-    }.to raise_error(ActiveRecord::StatementInvalid)
-  end
-=end
+  #   xit "does not allow duplicate scope names" do
+  #     Animal.scope :utotem, -> { where(name: "animal 1") } #{ puts "foo" }
+  #     #expect { Animal.scope :utotem, -> { where(role: "working") } }.to raise_error ArgumentError
+  #     #expect { Animal.scope :utotem, -> {} }.to raise_error ArgumentError
+  #   end
+  #
+  #   xit "yields a block passed to a scope extension" do
+  #     expect(Animal.yielder.yieldit { "yielded" }).to eq "yielded"
+  #   end
+  #
+  #   xit "exercises a scope" do
+  #     # work returns a string instead of a relation,
+  #     # next step is to see if it can return a relation
+  #     # and be chained.
+  #     #ap Animal.by_kind('dog').work('dog').to_sql
+  #     expect(Animal.by_kind('dog').work('dog')).to eq 'herd'
+  #   end
+  #
+  #   it "fails on wacko sql" do
+  #     # Animal.scope :badscope, -> { where("? - date.now.to_i > max_value", Time.now.utc.to_i) }
+  #
+  #     # Uncomment this to acquire failure specifics.
+  #     # expect(Animal.badscope).not_to be_empty
+  #
+  #     # puts Animal.badscope.to_sql
+  #     # We need to force an evaluation, `puts` its convenient.
+  #     # (This is a good segue into lazy evaluation.)
+  #     expect {
+  #       puts Animal.badscope
+  #     }.to raise_error(ActiveRecord::StatementInvalid)
+  #   end
 end

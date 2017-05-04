@@ -10,7 +10,7 @@ require 'ap'
 #####
 ####  Rails scopes are class methods invoked by instances.
 
-#Create a class with a scope and a class method and chain the two of them together.
+# Create a class with a scope and a class method and chain the two of them together.
 # http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/
 
 # WHY:
@@ -31,7 +31,6 @@ load './post_migration.rb'
 require './post_model'
 
 describe Post do
-
   before :all do
     Post.create title: 'Post 1', author: 'A. N. Author', category: 'horror', status: 'draft'
     Post.create title: 'Post 2', author: 'A. Writer', category: 'history', status: 'draft'
@@ -39,23 +38,23 @@ describe Post do
     Post.create title: 'Post 4', author: 'JRR Tolkien', category: 'fantasy', status: 'out of print'
   end
 
-  it "returns a relation" do
+  it 'returns a relation' do
     expect(Post.all.class).to eq ActiveRecord::Relation::ActiveRecord_Relation_Post
   end
 
-  it "writes out some sql for argument" do
+  it 'writes out some sql for argument' do
     puts Post.by_author('Dave').to_sql
   end
 
-  it "writes out some sql for argument" do
+  it 'writes out some sql for argument' do
     puts Post.by_author('').to_sql
   end
 
-  it "chains 2 class methods" do
+  it 'chains 2 class methods' do
     puts Post.by_author('').by_title('Jabberwocky').to_sql
   end
 
-  it "chains 2 class methods" do
+  it 'chains 2 class methods' do
     puts Post.by_author('JRR Tolkien').by_title('Return of the King').to_sql
   end
 end

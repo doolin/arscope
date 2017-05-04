@@ -14,11 +14,10 @@ class Posts < ActiveRecord::Migration
       t.timestamp
     end
   end
+
   def self.down
     drop_table :post
   end
 end
 
-unless Posts.table_exists?(:posts)
-  ActiveRecord::Migrator.migrate(Posts.up)
-end
+ActiveRecord::Migrator.migrate(Posts.up) unless Posts.table_exists?(:posts)
