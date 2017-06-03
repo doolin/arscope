@@ -1,9 +1,9 @@
-require './arscope'
+require_relative '../lib/arscope'
 
 describe Farm do
   before :all do
     # Nasty kludge. You can do better than this.
-    require './seed'
+    require_relative '../lib/seed'
   end
 
   let(:farm) { Farm.new }

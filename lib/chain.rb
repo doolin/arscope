@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'active_record'
-require 'active_support'
+# require 'active_support'
 # require 'protected_attributes'
 require 'logger'
 require 'rspec'
-require 'ap'
+require 'pry'
+# require 'ap'
 
 #####
 ####  Rails scopes are class methods invoked by instances.
@@ -28,9 +29,9 @@ require 'ap'
 
 load './connection.rb'
 load './post_migration.rb'
-require './post_model'
+require './post'
 
-describe Post do
+RSpec.describe Post do
   before :all do
     Post.create title: 'Post 1', author: 'A. N. Author', category: 'horror', status: 'draft'
     Post.create title: 'Post 2', author: 'A. Writer', category: 'history', status: 'draft'
@@ -39,7 +40,7 @@ describe Post do
   end
 
   it 'returns a relation' do
-    expect(Post.all.class).to eq ActiveRecord::Relation::ActiveRecord_Relation_Post
+    expect(Post.all.class).to eq Post::ActiveRecord::Relation
   end
 
   it 'writes out some sql for argument' do

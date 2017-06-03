@@ -1,4 +1,4 @@
-class Posts < ActiveRecord::Migration
+class Posts < ActiveRecord::Migration[5.1]
   def self.up
     create_table :posts do |t|
       t.string :status
