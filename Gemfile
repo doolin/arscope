@@ -4,17 +4,8 @@ gem 'deckrb'
 gem 'rerun'
 gem 'thin'
 
-
-
-# The whole point of this project was to use ActiveRecord
-# without all of rails. Somewhere in the rails 4 upgrade
-# that notion got lost.
-rv = '5.1.0'
-gem 'rails', "#{rv}"
-# gem 'protected_attributes'
-#gem 'activerecord', "#{rv}"
-#gem 'actionpack', "#{rv}"
-#gem 'activesupport', "#{rv}"
+rv = '5.1.1'
+gem 'activerecord', "#{rv}"
 
 # gem 'ransack'
 gem 'rspec'

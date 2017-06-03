@@ -63,8 +63,10 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.plural 'animal', 'animals'
 end
 
-load './connection.rb'
-load './migrations.rb'
+# load './connection.rb'
+load 'lib/connection.rb'
+# load './migrations.rb'
+load 'lib/migrations.rb'
 
 # To ensure we get an ARel back, we may need to monkey
 # patch:
@@ -111,7 +113,8 @@ class Farm < ActiveRecord::Base
 end
 
 puts 'before loading animal'
-load './animal.rb'
+# load './animal.rb'
+load 'lib/animal.rb'
 puts 'after loading animal'
 
 # http://guides.rubyonrails.org/initialization.html
@@ -152,7 +155,9 @@ describe Animal do
   #     require './seed'
   #   end
 
-  before(:all) { require './seed' }
+  # before(:all) { require './seed' }
+  # before(:all) { load 'lib/seed' }
+  before(:all) { require_relative '../lib/seed' }
 
   it 'new animal should be valid' do
     animal.should be_valid
