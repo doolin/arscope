@@ -37,6 +37,7 @@ GEM
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
     daemons (1.2.4)
+    database_cleaner (1.6.1)
     deckrb (0.5.2)
       coderay
       erector (>= 0.9.0)
@@ -161,6 +162,7 @@ DEPENDENCIES
   awesome_print
   brakeman
   cane
+  database_cleaner
   deckrb
   pry-nav
   rerun

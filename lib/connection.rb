@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 DB_SPEC = {
   adapter: 'sqlite3',
   database: 'scope.sqlite3',

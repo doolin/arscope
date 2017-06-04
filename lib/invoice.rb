@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: explain why we want to extend rather than include,
 # and how that implies a scope is not much different than
 # a regular Ruby class method.

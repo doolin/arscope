@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'active_record'
 require 'active_support'
@@ -122,12 +123,12 @@ puts 'after loading animal'
 # Assign an object to a has_one association in an existing object,
 # that associated object will be saved.
 # Read from p. 323 in Agile 3rd Edition on CRUD.
-o1 = Farm.create name: 'farm 1'
-i1 = Animal.new name: 'animal 1'
+_o1 = Farm.create name: 'farm 1'
+_i1 = Animal.new name: 'animal 1'
 # o1.animals = [i1]
 
-o2 = Farm.new name: 'farm 2'
-i2 = Animal.new name: 'animal 2'
+_o2 = Farm.new name: 'farm 2'
+_i2 = Animal.new name: 'animal 2'
 # i2.save
 
 o3 = Farm.new name: 'farm 3'
@@ -135,8 +136,8 @@ o3.save
 
 # Same as scenario 1, using new instead of create
 # Nothing gets saved
-o4 = Farm.new name: 'farm 4'
-i4 = Animal.new name: 'animal 5', weight: 42.13
+_o4 = Farm.new name: 'farm 4'
+_i4 = Animal.new name: 'animal 5', weight: 42.13
 # o4.animal = i4
 
 # ActiveRecord::Base.logger = Logger.new(STDOUT)

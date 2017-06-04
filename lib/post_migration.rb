@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Posts < ActiveRecord::Migration[5.1]
   def self.up
     create_table :posts do |t|

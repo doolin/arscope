@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 task default: [:clean]
 
 desc 'Clean up database files, etc.'
