@@ -64,10 +64,10 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.plural 'animal', 'animals'
 end
 
-# load './connection.rb'
-load 'lib/connection.rb'
-# load './migrations.rb'
-load 'lib/migrations.rb'
+load './connection.rb'
+# load 'lib/connection.rb'
+load './migrations.rb'
+# load 'lib/migrations.rb'
 
 # To ensure we get an ARel back, we may need to monkey
 # patch:
@@ -114,8 +114,8 @@ class Farm < ActiveRecord::Base
 end
 
 puts 'before loading animal'
-# load './animal.rb'
-load 'lib/animal.rb'
+load './animal.rb'
+# load 'lib/animal.rb'
 puts 'after loading animal'
 
 # http://guides.rubyonrails.org/initialization.html
