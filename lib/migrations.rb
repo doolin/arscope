@@ -15,7 +15,7 @@ class Farms < ActiveRecord::Migration[5.1]
   end
 end
 
-ActiveRecord::Migrator.migrate(Farms.up) unless Farms.table_exists?(:farms)
+ActiveRecord::Migrator.new(:up, Farms.up).migrate unless Farms.table_exists?(:farms)
 
 class Animals < ActiveRecord::Migration[5.1]
   def self.up
@@ -39,7 +39,7 @@ class Animals < ActiveRecord::Migration[5.1]
 end
 
 unless Animals.table_exists?(:animals)
-  ActiveRecord::Migrator.migrate(Animals.up)
+  ActiveRecord::Migrator.new(:up, Animals.up).migrate
 end
 
 # class LocalScopers < ActiveRecord::Migration
