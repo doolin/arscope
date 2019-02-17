@@ -15,6 +15,11 @@ was calling a "driver" file, driver being too ambiguous. The microscope
 (nee driver) file for the presentation is `src/arscope.rb`. It should
 run by itself, or via `rspec arscope.rb`.
 
+## Links
+
+* [Justin Weiss has an
+opinion](https://www.justinweiss.com/articles/should-you-use-scopes-or-class-methods/)
+
 ## License
 
 Photos in the presentation are CC licensed, follow the photo credit
