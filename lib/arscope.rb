@@ -64,9 +64,9 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.plural 'animal', 'animals'
 end
 
-load './connection.rb'
+load './lib/connection.rb'
 # load 'lib/connection.rb'
-load './migrations.rb'
+load './lib/migrations.rb'
 # load 'lib/migrations.rb'
 
 # To ensure we get an ARel back, we may need to monkey
