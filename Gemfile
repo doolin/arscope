@@ -6,7 +6,7 @@ gem 'deckrb'
 gem 'rerun'
 gem 'thin'
 
-rv = '5.2.1'
+rv = '5.2.3'
 gem 'activerecord', rv.to_s
 
 # gem 'ransack'

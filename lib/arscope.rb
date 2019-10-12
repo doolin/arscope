@@ -114,7 +114,7 @@ class Farm < ActiveRecord::Base
 end
 
 puts 'before loading animal'
-load './animal.rb'
+load './lib/animal.rb'
 # load 'lib/animal.rb'
 puts 'after loading animal'
 
