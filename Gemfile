@@ -20,6 +20,7 @@ gem 'pry-nav'
 # gem 'seeing_is_believing'
 gem 'yard'
 gem 'ap'
+gem 'rubycritic', require: false
 
 gem 'cane'
 gem 'brakeman'
