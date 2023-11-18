@@ -1,5 +1,6 @@
 ---
 marp: true
+theme: ./deck/theme.css
 ---
 
 # ActiveRecord Scopes *without* Rails (and without scopes)
@@ -41,9 +42,9 @@ of tasty Rails treats here.
 
 ---
 
-# The view from 80,000 feet
+<!-- # The view from 80,000 feet -->
 
-![Blackbird can see you](/images/sr71.jpg)
+![Blackbird can see you height:600px bg center](/images/sr71.jpg)
 
 ---
 
