@@ -25,9 +25,7 @@ Verify everything for yourself!
 
 # Personal motivation
 
-We're moving a lot of data out of Postgres and into Cassandra,
-hence we lose all our ActiveRecord goodies , for example, the
-`scope` method.
+We're moving a lot of data out of Postgres and into Cassandra, hence we lose all our ActiveRecord goodies , for example, the `scope` method.
 
 ### But we still have to do everything the scopes were doing
 
@@ -53,10 +51,8 @@ of tasty Rails treats here.
 
 Two main reasons:
 
-1. Scopes provide a semantically convenient shorthand for SQL
-   statements.
-1. Scopes can be *chained*, tremendously easing the cognitive load of
-   creating the correct SQL for complicated queries.
+1. Scopes provide a semantically convenient shorthand for SQL statements.
+1. Scopes can be *chained*, tremendously easing the cognitive load of creating the correct SQL for complicated queries.
 
 ### Basically, scopes allow defining custom database queries and query fragments
 
@@ -64,15 +60,13 @@ Two main reasons:
 
 # What we want to get out of this
 
-* Some understanding how the ActiveRecord implementation of
-scope works.
+* Some understanding how the ActiveRecord implementation of scope works.
 * How scope chaining works.
 * How class methods can chain with scopes.
 * How to control queries on parameter values.
 * Some tips for debugging scopes. (Hint: use `to_sql`)
 * When and why to pass blocks into scopes.
-* (Personal goal) structure and formatting of talk for
-  content reuse. That is, can this talk be delivered on a Kindle?
+* (Personal goal) structure and formatting of talk for content reuse. That is, can this talk be delivered on a Kindle?
 
 ---
 
@@ -80,24 +74,23 @@ scope works.
 
 The method definition of scope has 3 parts.
 
-~~~~
-@@@ ruby
-  # activerecord/lib/active_record/scoping/named.rb
-  def scope(name, body, &block)
-    if dangerous_class_method?(name)
-      raise ArgumentError, "Already defined scope"
-    end
-
-    extension = Module.new(&block) if block
-
-    singleton_class.send(:define_method, name) do |*args|
-      scope = all.scoping { body.call(*args) }
-      scope = scope.extending(extension) if extension
-
-      scope || all
-    end
+```ruby
+# activerecord/lib/active_record/scoping/named.rb
+def scope(name, body, &block)
+  if dangerous_class_method?(name)
+    raise ArgumentError, "Already defined scope"
   end
-~~~~
+
+  extension = Module.new(&block) if block
+
+  singleton_class.send(:define_method, name) do |*args|
+    scope = all.scoping { body.call(*args) }
+    scope = scope.extending(extension) if extension
+
+    scope || all
+  end
+end
+```
 
 ---
 
@@ -113,18 +106,17 @@ The method definition of scope has 3 parts.
 
 ### (scope def. part 1)
 
-First order of business: has a scope by this name already been defined,
-or does is the scope name a reserved words?
+First order of business: has a scope by this name already been defined, or does is the scope name a reserved words?
 
 Reserved words, can't name a scope any of these:
 
-~~~~
-@@@ ruby
-  # active_record/scoping/named.rb:142
-  if dangerous_class_method?(name)
-    raise ArgumentError, "Already defined scope"
-  end
-~~~~
+
+```ruby
+# active_record/scoping/named.rb:142
+if dangerous_class_method?(name)
+  raise ArgumentError, "Already defined scope"
+end
+```
 
 ### Did you know?
 
@@ -137,14 +129,13 @@ This presentation has an Appendix, where you can find the definition of
 
 ### (scope def. part 2)
 
-~~~~
-@@@ ruby
-  # active_record/scoping/named.rb:148
-  extension = Module.new(&block) if block
-~~~~
+```ruby
+# active_record/scoping/named.rb:148
+extension = Module.new(&block) if block
+```
 
-Apparently, few people have heard of scope extensions, and fewer seem to
-use them.
+
+Apparently, few people have heard of scope extensions, and fewer seem to use them.
 
 We'll return to scope extensions later.
 
@@ -154,24 +145,19 @@ We'll return to scope extensions later.
 
 ### (scope def. part 3)
 
-~~~~
-@@@ ruby
-  # active_record/scoping/named.rb:150
-  singleton_class.send(:define_method, name) do |*args|
-    scope = all.scoping { body.call(*args) }
-    scope = scope.extending(extension) if extension
+```ruby
+# active_record/scoping/named.rb:150
+singleton_class.send(:define_method, name) do |*args|
+  scope = all.scoping { body.call(*args) }
+  scope = scope.extending(extension) if extension
 
-    scope || all
-  end
-~~~~
+  scope || all
+end
+```
 
-* `define_method` belongs to Ruby's [Module
-class](http://www.ruby-doc.org/core-2.1.3/Module.html#method-i-define_method).
-Here, we send the block to be used for the scope's
-method body.
+* `define_method` belongs to Ruby's [Module class](http://www.ruby-doc.org/core-2.1.3/Module.html#method-i-define_method). Here, we send the block to be used for the scope's method body.
 * `body` is the callback passed to the scope definition in the model
-* `extension` handles a block passed to the scope definition in the
-  model (we'll look at this in more detail later).
+* `extension` handles a block passed to the scope definition in the model (we'll look at this in more detail later).
 
 ---
 
@@ -179,36 +165,30 @@ method body.
 
 ### `all.scoping`
 
-See the [method definition for
-`scoping`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation.rb#L301)
-in the Rails source at Github.
+See the [method definition for `scoping`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation.rb#L301) in the Rails source at Github.
+
+---
 
 # Review: scopes help generate queries
 
-What we really want to see here is the underlying SQL, using
-the `to_sql` method on the ARel.
+What we really want to see here is the underlying SQL, using the `to_sql` method on the ARel.
 
 Simple explanation, demo/example.
 
-~~~~
-@@@ ruby
+```ruby
 class Animal
   scope :by_role, -> role { where(role: role) }
 end
-
 2.1.2 :001 > Animal.by_role('working').to_sql
  => "SELECT animals.* FROM animals  WHERE animals.role = 'working'"
-~~~~
-
+```
 ---
 
 # Kindle-sized code snippets
 
-This talk is also, in part, an experiment in cross-platform
-code readability.
+This talk is also, in part, an experiment in cross-platform code readability.
 
-Specifically, can code be discussed on devices as small
-as Kindle?
+Specifically, can code be discussed on devices as small as Kindle?
 
 We won't find out here, but this is step along that path.
 
@@ -216,29 +196,24 @@ We won't find out here, but this is step along that path.
 
 # Begin at the beginning
 
-What we really want is a single file application, where
-all the various bits represent the important parts.
+What we really want is a single file application, where all the various bits represent the important parts.
 
-That won't fly in a presentation, it won't fit on a slide.
-
-Won't fit on Kindle screen either.
+That won't fly in a presentation, it won't fit on a slide. Won't fit on Kindle screen either.
 
 But we can write a driver file named `arscope.rb`.
 
 ## driver file `arscope.rb`
 
-~~~~
-@@@ ruby
-  #!/usr/bin/env ruby
+```ruby
+#!/usr/bin/env ruby
 
-  include 'active_record'
-  include 'active_support'
-  include 'logger'
-  include 'rspec'
-~~~~
+include 'active_record'
+include 'active_support'
+include 'logger'
+include 'rspec'
+```
 
-Since we're interested in scopes, which are ActiveRecord methods,
-we'll need some sort of database connection as well.
+Since we're interested in scopes, which are ActiveRecord methods, we'll need some sort of database connection as well.
 
 ---
 
@@ -246,31 +221,28 @@ we'll need some sort of database connection as well.
 
 Let's create a file, `connection.rb`, with the following code:
 
-~~~~
-@@@ ruby
-  DB_SPEC = {
-    adapter: "sqlite3",
-    database: "scope.sqlite3",
-    pool: 5,
-    timeout: 5000
-  }
-
-  ActiveRecord::Base.establish_connection(DB_SPEC)
-~~~~
+```ruby
+DB_SPEC = {
+  adapter: "sqlite3",
+  database: "scope.sqlite3",
+  pool: 5,
+  timeout: 5000
+}
+ActiveRecord::Base.establish_connection(DB_SPEC)
+```
 
 Now we load it....
 
-~~~~
-@@@ ruby
-  #!/usr/bin/env ruby
+```ruby
+#!/usr/bin/env ruby
 
-  include 'active_record'
-  include 'active_support'
-  include 'logger'
-  include 'rspec'
+include 'active_record'
+include 'active_support'
+include 'logger'
+include 'rspec'
 
-  load './connection.rb'
-~~~~
+load './connection.rb'
+```
 
 ---
 
@@ -284,18 +256,15 @@ Now we load it....
 
 # Migrations (farms have animals)
 
-~~~~
-@@@ ruby
+```ruby
 class Animals < ActiveRecord::Migration
   def self.up
     create_table :animals do |t|
       t.string :name
-      # Why can't we use `type` here?
-      # t.string :type
+      # t.string :type # Why can't we use `type` here?
       t.string :kind
       t.string :breed
       t.string :role
-      t.datetime :last_vet
       t.timestamp
     end
   end
@@ -303,22 +272,18 @@ class Animals < ActiveRecord::Migration
     drop_table :animals
   end
 end
-
 unless Animals.table_exists?(:animals)
   ActiveRecord::Migrator.migrate(Animals.up)
 end
-~~~~
+```
 
-We might add more migrations later, but they won't fit on the slide.
-
-(We could load each migration from its own file...)
+We might add more migrations later, but they won't fit on the slide. (We could load each migration from its own file...)
 
 ---
 
 # And, once again...
 
-~~~~
-@@@ ruby
+```ruby
   #!/usr/bin/env ruby
 
   include 'active_record'
@@ -326,9 +291,9 @@ We might add more migrations later, but they won't fit on the slide.
   include 'logger'
   include 'rspec'
 
-  load './connection.rb'
-  load './migrations.rb'
-~~~~
+  require './connection.rb'
+  require './migrations.rb'
+```
 
 ---
 
@@ -336,20 +301,18 @@ We might add more migrations later, but they won't fit on the slide.
 
 Create a file `animal.rb`:
 
-~~~~
-@@@ ruby
+```ruby
 class Animal < ActiveRecord::Base
   scope :pets, -> { where(role: 'pet') }
   scope :by_kind, -> (kind) { where(kind: kind) }
 end
-~~~~
+```
 
 ---
 
 # Yet again...
 
-~~~~
-@@@ ruby
+```ruby
 #!/usr/bin/env ruby
 
 include 'active_record'
@@ -357,13 +320,12 @@ include 'active_support'
 include 'logger'
 include 'rspec'
 
-load './connection.rb'
-load './migrations.rb'
-load './animal.rb'
-~~~~
+require './connection.rb'
+require './migrations.rb'
+require './animal.rb'
+```
 
-From here on out, let's assume we're all smart enough to remember
-to add the new file.
+From here on out, let's assume we're all smart enough to remember to add the new file.
 
 ---
 
@@ -373,53 +335,49 @@ Depends.
 
 But probably, yes.
 
-If developing Test-First, certainly. One can (and should) always remove redundant
-tests later.
+If developing Test-First, certainly. One can always (and should) remove redundant tests later.
 
 However, no matter anyone's opinion,
 
 ### we're testing scopes in this talk,
 
-because it's useful for demonstrating behavior.
+Because it's useful for demonstrating behavior.
 
 ---
 
 # And here's how we're testing scopes...
 
-~~~~
-@@@ ruby
-  #!/usr/bin/env ruby
+```ruby
+#!/usr/bin/env ruby
 
-  include 'active_record'
-  include 'active_support'
-  include 'logger'
-  include 'rspec'
+include 'active_record'
+include 'active_support'
+include 'logger'
+include 'rspec'
 
-  load './connection.rb'
-  load './migrations.rb'
-  load './animal.rb'
+require './connection.rb'
+require './migrations.rb'
+require './animal.rb'
 
-  describe Animal do
-    before(:all) { require './seed' }
-    it "finds the pets" do
-      expect(Animal.pets.count).to eq 2
-    end
+describe Animal do
+  before(:all) { require './seed' }
+  it "finds the pets" do
+    expect(Animal.pets.count).to eq 2
   end
-~~~~
+end
+```
 
 ---
 
 # Replace scope with class method
 
-From Blogistan, for replacing a scope with a class method,
-we get something like this:
+From Blogistan, for replacing a scope with a class method, we get something like this:
 
-~~~~
-@@@ ruby
+```ruby
 def self.by_kind kind
     where(kind: kind)
 end
-~~~~
+```
 
 It's that simple.
 
@@ -427,8 +385,7 @@ It's that simple.
 
 # Why chaining works
 
-Chaining, in general, works by sending a message to the method on the
-returned object.
+Chaining, in general, works by sending a message to the method on the returned object.
 
 Example: `"Foo".downcase.reverse => "oof"`
 
@@ -437,8 +394,7 @@ Example: `"Foo".downcase.reverse => "oof"`
 
 ### Why chaining scopes works
 
-`QueryMethods`, from
-[ActiveRecord::Relation (Arel)](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation/query_methods.rb) return Arel objects.
+`QueryMethods`, from [ActiveRecord::Relation (Arel)](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation/query_methods.rb) return Arel objects.
 
 ---
 
@@ -453,12 +409,11 @@ Example: `"Foo".downcase.reverse => "oof"`
 
 # Scope-to-scope chaining
 
-~~~~
-@@@ ruby
+```ruby
 it "finds the pet cats" do
   expect(Animal.pets.by_kind("cat").pluck(:name)).to include "Wheezie"
 end
-~~~~
+```
 
 ---
 
@@ -470,8 +425,7 @@ end
 
 # More useful scopes and methods
 
-~~~~
-@@@ ruby
+```ruby
 class Animal < ActiveRecord::Base
   scope :needs_vet, -> { where("last_vet < ?", 1.year.ago) }
   scope :by_name, -> (n) { where(name: n) }
@@ -491,7 +445,8 @@ class Animal < ActiveRecord::Base
   def self.by_role role
     where(role: role)
   end
-~~~~
+end
+```
 
 ---
 
@@ -500,12 +455,11 @@ class Animal < ActiveRecord::Base
 * Scope: `by_kind`
 * Class method: `by_role`
 
-~~~~
-@@@ ruby
+```ruby
 it "finds the pet cats by kind and role" do
   expect(Animal.by_kind('cat').by_role('pet').pluck(:name)).to include "Wheezie"
 end
-~~~~
+```
 
 ---
 
@@ -514,12 +468,11 @@ end
 * Class method: `by_role`
 * Scope: `by_kind`
 
-~~~~
-@@@ ruby
+```ruby
 it "finds the pet cats by role and kind" do
   expect(Animal.by_role('pet').by_kind('cat').pluck(:name)).to include "Wheezie"
 end
-~~~~
+```
 
 ---
 
@@ -528,12 +481,11 @@ end
 * Class method: `by_role`
 * Class method: `by_breed`
 
-~~~~
-@@@ ruby
+```ruby
 it "finds all the angus" do
   expect(Animal.by_role('stock').by_breed('angus').size).to eq 2
 end
-~~~~
+```
 
 ---
 
@@ -552,14 +504,13 @@ regular basis?
 
 Simple example:
 
-~~~
-@@@ ruby
+```ruby
 scope :foo, -> { where(bar: 'baz') } do
   def quux
     'foobar'
   end
 end
-~~~
+```
 
 ---
 
@@ -569,69 +520,59 @@ It's not hard to blunder in scope definitions.
 
 One favorite way of mine is mixing Ruby with SQL.
 
-ActiveRecord is perfectly happy to define perfectly invalid SQL,
-which leaves debugging up to us Rubyists.
+ActiveRecord is perfectly happy to define perfectly invalid SQL, which leaves debugging up to us Rubyists.
 
 Consider the following:
 
-~~~~
-@@@ ruby
+```ruby
   scope :badscope, -> { where("? - Date.now.to_i > max_value", Time.now.utc.to_i) }
-~~~~
+```
 
 ### Looks perfectly reasonable...at first glance.
 
 Even the SQL looks somewhat reasonable:
 
-~~~~
-@@@ sql
+```sql
 SELECT "animals".* FROM "animals"  WHERE (1413899468 - Date.now.to_i > max_value)
-~~~~
+```
 
 ---
 
 # Let's see what the database has to say...
 
-~~~~
-@@@ sql
+```sql
 sqlite> SELECT "animals".* FROM "animals"  WHERE (1413899468 - date.now.to_i > max_value);
 Error: no such column: date.now.to_i
-~~~~
+```
 
 ### Ha ha.
 
-You think it's funny now (and it is), but spend a couple of hours at the
-end of the week trying to figure out why your *Rails* application isn't
-working.
+You think it's funny now (and it is), but spend a couple of hours at the end of the week trying to figure out why your *Rails* application isn't working.
 
 ---
 
 # REPL is your friend
 
-You can test these out in Rails console, or open up a database
-connection (`rails db`).
+You can test these out in Rails console, or open up a database connection (`rails db`).
 
 Sans Rails, just fire up a database client.
 
-Either way, paste in the result of `to_sql` on the scope and
-see what the database thinks about it.
+Either way, paste in the result of `to_sql` on the scope and see what the database thinks about it.
 
 ### And so are scope tests!
 
-~~~~
-@@@ ruby
+```ruby
 Failure/Error: expect(Animal.badscope).not_to be_empty
      ActiveRecord::StatementInvalid:
        SQLite3::SQLException: no such column: date.now.to_i: SELECT
 COUNT(*) FROM "animals"  WHERE (1413985311 - date.now.to_i > max_value)
-~~~~
+```
 
 ---
 
 # Testing a scope with RSpec
 
-~~~~
-@@@ ruby
+```ruby
   it "fails bad scope definition on wacko (invalid) sql" do
     # Uncomment this to acquire failure specifics.
     # expect(Animal.badscope).not_to be_empty
@@ -641,29 +582,24 @@ COUNT(*) FROM "animals"  WHERE (1413985311 - date.now.to_i > max_value)
       puts Animal.badscope
     }.to raise_error(ActiveRecord::StatementInvalid)
   end
-~~~~
+```
 
 ## Summarizing
 
-As web programmers, we're polyglot, we have to program competently in
-several programming languages every day.
+As web programmers, we're polyglot, we have to program competently in several programming languages every day.
 
-The upshot here: when I've been looking at Ruby all day long, sometimes
-shifting gears into SQL doesn't.
+The upshot here: when I've been looking at Ruby all day long, sometimes shifting gears into SQL doesn't.
 
 ---
 
 # How about "AnRel" (Active Non-Relation)
 
-Is there any way to generalize this to non-relational
-database queries?
+Is there any way to generalize this to non-relational database queries?
 
 ### AnRel
 
 
-Create a wrapper around the query structure of the non-relational
-system, ensure whatever replaces `scope` returns the non-relation
-on every call.
+Create a wrapper around the query structure of the non-relational system, ensure whatever replaces `scope` returns the non-relation on every call.
 
 ---
 
@@ -683,25 +619,14 @@ As usual, employ (or deploy) at your own risk:
 
 # Summarizing
 
-This wasn't especially long, but it was dense. Here are a few links
-for digging deeper:
+This wasn't especially long, but it was dense. Here are a few links for digging deeper:
 
-### Links
-
-* [Scopes vs. class methods](http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/)
-  from Platformatec.
-* [Method
-  chaining](http://jeffkreeftmeijer.com/2011/method-chaining-and-lazy-evaluation-in-ruby/)
-  from Jeff Kreeftmeijer.
-* [Class structure for method
-  chaining](http://tjackiw.tumblr.com/post/23155838377/interview-challenge-ruby-method-chaining).
-* [Extending vs
-  including](http://www.medihack.org/2011/03/15/intend-to-extend/) good refresher article.
-* [Rails named scope
-  definition](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb)
-  can't go wrong with source code.
-* [`blank` and
-  `present?`](http://guides.rubyonrails.org/active_support_core_extensions.html#blank-questionmark-and-present-questionmark) from the Ruby on Rails Guide.
+* [Scopes vs. class methods](http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/) from Platformatec.
+* [Method chaining](http://jeffkreeftmeijer.com/2011/method-chaining-and-lazy-evaluation-in-ruby/) from Jeff Kreeftmeijer.
+* [Class structure for method chaining](http://tjackiw.tumblr.com/post/23155838377/interview-challenge-ruby-method-chaining).
+* [Extending vs including](http://www.medihack.org/2011/03/15/intend-to-extend/) good refresher article.
+* [Rails named scope definition](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/scoping/named.rb) can't go wrong with source code.
+* [`blank` and`present?`](http://guides.rubyonrails.org/active_support_core_extensions.html#blank-questionmark-and-present-questionmark) from the Ruby on Rails Guide.
 * [`blank` and `present?`](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/object/blank.rb) from the Rails source code.
 * [`dangerous_class_method?`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_methods.rb#L148), more source.
 * [Abstracting persistence in Rails](https://medium.com/@KamilLelonek/why-is-your-rails-application-still-coupled-to-activerecord-efe34d657c91)
@@ -715,53 +640,53 @@ for digging deeper:
 
 # `dangerous_class_method?`
 
-~~~~
-@@@ ruby
-  # activerecord/lib/active_record/attribute_methods.rb
-  BLACKLISTED_CLASS_METHODS = %w(private public protected allocate new name parent superclass)
+```ruby
+# activerecord/lib/active_record/attribute_methods.rb
+BLACKLISTED_CLASS_METHODS = %w(private public protected allocate new name parent superclass)
 
-  # A class method is 'dangerous' if it is
-  # already (re)defined by Active Record, but
-  # not by any ancestors. (So 'puts' is not dangerous but 'new' is.)
-  def dangerous_class_method?(method_name)
-    BLACKLISTED_CLASS_METHODS.include?(method_name.to_s)
-    || class_method_defined_within?(method_name, Base)
-  end
+# A class method is 'dangerous' if it is
+# already (re)defined by Active Record, but
+# not by any ancestors. (So 'puts' is not dangerous but 'new' is.)
+def dangerous_class_method?(method_name)
+  BLACKLISTED_CLASS_METHODS.include?(method_name.to_s)
+  || class_method_defined_within?(method_name, Base)
+end
 
-  def class_method_defined_within?(name,
-    klass, superklass = klass.superclass) # :nodoc
+def class_method_defined_within?(name,
+  klass, superklass = klass.superclass) # :nodoc
 
-    if klass.respond_to?(name, true)
-      if superklass.respond_to?(name, true)
-        klass.method(name).owner != superklass.method(name).owner
-      else
-        true
-      end
+  if klass.respond_to?(name, true)
+    if superklass.respond_to?(name, true)
+      klass.method(name).owner != superklass.method(name).owner
     else
-      false
+      true
     end
+  else
+    false
   end
+end
 # `all`
-~~~~
+```
 
-~~~~
-@@@ ruby
-  # Returns an <tt>ActiveRecord::Relation</tt> scope object.
-  # [snip snap]
-  # You can define a scope that applies to all finders using
-  # <tt>ActiveRecord::Base.default_scope</tt>.
-  def all
-    if current_scope
-      current_scope.clone
-    else
-      default_scoped
-    end
-  end
+---
 
-  def default_scoped # :nodoc:
-    relation.merge(build_default_scope)
+```ruby
+# Returns an <tt>ActiveRecord::Relation</tt> scope object.
+# [snip snap]
+# You can define a scope that applies to all finders using
+# <tt>ActiveRecord::Base.default_scope</tt>.
+def all
+  if current_scope
+    current_scope.clone
+  else
+    default_scoped
   end
-~~~~
+end
+
+def default_scoped # :nodoc:
+  relation.merge(build_default_scope)
+end
+```
 
 ---
 
@@ -769,46 +694,40 @@ for digging deeper:
 
 Consider the following definitions:
 
-~~~~
-@@@ ruby
+```ruby
 scope :by_kind, ->(k) { where(kind: k) }
 scope :by_role, ->(r) { where(role: r) }
-~~~~
+```
 
 with query:
 
-~~~~
-@@@ ruby
+```ruby
 Animal.by_kind('cat').by_role('pet')
-~~~~
+```
 
 which produces the follow SQL:
 
-~~~~
-@@@ sql
+```sql
 SELECT * FROM animals  WHERE kind = 'cat' AND role = 'pet'
-~~~~
+```
 
 ---
 
 # When parameter isn't `present?`
 
-~~~~
-@@@ sql
+```sql
 SELECT * FROM animals WHERE kind = 'cat' AND role = ''
 
 SELECT * FROM animals  WHERE kind = 'cat' AND role IS NULL
-~~~~
+```
 
 ---
 
 # When `nil` and `blank` matter
 
-From Blogistan, for replacing a scope with a class method,
-we get something like this:
+From Blogistan, for replacing a scope with a class method, we get something like this:
 
-~~~~
-@@@ ruby
+```ruby
 def self.by_kind kind
   if kind.present?
     where(kind: kind)
@@ -816,30 +735,25 @@ def self.by_kind kind
     all # return arel when kind.nil?
   end
 end
-~~~~
+```
 
 But that's nasty, don't you think? Let's do it
 
 ### Ruby style:
 
-~~~~
-@@@ ruby
+```ruby
 def self.by_kind kind
   where(kind: kind) if kind.present? or all
 end
-~~~~
+```
 
 ---
 
 # Extending class methods
 
-Just as scopes can be extended, so can class methods:
+Just as scopes can be extended, so can class methods: Platformatec demonstrates how this is done using the `kaminari` pagination gem:
 
-Platformatec demonstrates how this is done using the `kaminari`
-pagination gem:
-
-~~~~
-@@@ ruby
+```ruby
 def self.page(num)
   scope = # some limit + offset logic here for pagination
   scope.extend PaginationExtensions
@@ -863,7 +777,7 @@ module PaginationExtensions
     # and so on
   end
 end
-~~~~
+```
 
 ---
 
