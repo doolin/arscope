@@ -6,13 +6,12 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: Include, TreatCommentsAsGroupSeparators.
-# Include: **/Gemfile, **/gems.rb
-Bundler/OrderedGems:
-  Exclude:
-    - 'Gemfile'
+require:
+  - rubocop-rspec
+
+AllCops:
+  SuggestExtensions: true
+  NewCops: enable
 
 # Offense count: 1
 # Configuration parameters: CountComments, ExcludedMethods.

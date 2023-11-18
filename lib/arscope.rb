@@ -64,8 +64,8 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.plural 'animal', 'animals'
 end
 
-require './lib/connection.rb'
-require './lib/migrations.rb'
+require './lib/connection'
+require './lib/migrations'
 
 # To ensure we get an ARel back, we may need to monkey
 # patch:
@@ -183,7 +183,7 @@ describe Animal do
     ## Put this on a slide
     Animal.scope('foo', -> {}) # { "quux" }
     expect(Animal.foo.count).to be >= 0
-    Animal.methods.should  include :foo
+    Animal.methods.should include :foo
   end
 
   # Need to load an animal in the db such that this test passes.

@@ -2,24 +2,25 @@
 
 source 'http://rubygems.org'
 
-gem 'activerecord'
 gem 'actionpack'
+gem 'activerecord'
 
 # gem 'ransack'
 
+gem 'database_cleaner'
 gem 'rspec'
 gem 'rspec-rails'
-# gem 'database_cleaner'
 gem 'sqlite3'
 # gem 'awesome_print'
 # gem 'pry-nav'
 # gem 'yard'
 # gem 'ap'
 
-gem 'flog'
-gem 'flay'
-gem 'reek'
 gem 'brakeman'
+gem 'flay'
+gem 'flog'
+gem 'reek'
 gem 'rubocop'
-gem 'rubocop-rails'
 gem 'rubocop-performance'
+gem 'rubocop-rails'
+gem 'rubocop-rspec'

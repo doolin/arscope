@@ -17,7 +17,7 @@ class Animal < ActiveRecord::Base
 
   ##  Why can't we use 'type' here?
   # scope :is, -> (kind) { where(type: kind) }
-  scope :by_kind, (->(kind) { where(kind: kind) }) do
+  scope :by_kind, (->(kind) { where(kind:) }) do
     def work(kind)
       'herd' if kind == 'dog'
     end
@@ -47,11 +47,11 @@ class Animal < ActiveRecord::Base
   # Check behavior of the following against the scope above.
   # Something isn't quite right.
   def self.by_breed(breed)
-    where(breed: breed) if breed.present? || all
+    where(breed:) if breed.present? || all
   end
 
   def self.by_role(role)
-    where(role: role) if role.present? || all
+    where(role:) if role.present? || all
   end
 
   class << self
