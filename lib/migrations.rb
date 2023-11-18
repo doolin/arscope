@@ -6,7 +6,7 @@ class Farms < ActiveRecord::Migration[5.1]
       t.string :name
       t.string :location
 
-      t.timestamp
+      t.timestamps
     end
   end
 
@@ -14,8 +14,6 @@ class Farms < ActiveRecord::Migration[5.1]
     drop_table :farms
   end
 end
-
-ActiveRecord::Migrator.new(:up, Farms.up).migrate unless Farms.table_exists?(:farms)
 
 class Animals < ActiveRecord::Migration[5.1]
   def self.up
@@ -29,7 +27,7 @@ class Animals < ActiveRecord::Migration[5.1]
       t.string :sku
       t.datetime :last_vet
 
-      t.timestamp
+      t.timestamps
     end
   end
 
@@ -38,9 +36,8 @@ class Animals < ActiveRecord::Migration[5.1]
   end
 end
 
-unless Animals.table_exists?(:animals)
-  ActiveRecord::Migrator.new(:up, Animals.up).migrate
-end
+Animals.up unless Animals.table_exists?(:animals)
+Farms.up unless Farms.table_exists?(:farms)
 
 # class LocalScopers < ActiveRecord::Migration
 #   def self.up

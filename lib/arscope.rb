@@ -2,10 +2,10 @@
 # frozen_string_literal: true
 
 require 'active_record'
-require 'active_support'
-require 'logger'
+# require 'active_support'
+# require 'logger'
 require 'rspec'
-require 'pry-nav'
+# require 'pry-nav'
 # require 'ap'
 
 #####
@@ -64,10 +64,8 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.plural 'animal', 'animals'
 end
 
-load './lib/connection.rb'
-# load 'lib/connection.rb'
-load './lib/migrations.rb'
-# load 'lib/migrations.rb'
+require './lib/connection.rb'
+require './lib/migrations.rb'
 
 # To ensure we get an ARel back, we may need to monkey
 # patch:

@@ -2,8 +2,10 @@
 
 This repo contains:
 
-1. a `deck.rb` presentation,
+1. a `deck.rb` presentation, which will run in `marp`
 2. supporting source code.
+3. [2023-11-17] random other stuff which needs to go away.
+4. Run the slides with `npx @marp-team/marp-cli@latest -s deck/`
 
 ## Microscope?
 

@@ -1,5 +1,10 @@
+---
+marp: true
+---
+
 # ActiveRecord Scopes *without* Rails (and without scopes)
 
+---
 
 # DISCLAIMER
 
@@ -15,6 +20,8 @@ investigation to improve my own skills.
 Verify everything for yourself!
 
 (Don't just take my word for it.)
+
+---
 
 # Personal motivation
 
@@ -34,10 +41,13 @@ for NoSQL tools?
 The answer to that is still open, but there are plenty
 of tasty Rails treats here.
 
+---
+
 # The view from 80,000 feet
 
 ![Blackbird can see you](/images/sr71.jpg)
 
+---
 
 # Why ActiveRecord scopes?
 
@@ -50,6 +60,8 @@ Two main reasons:
 
 ### Basically, scopes allow defining custom database queries and query fragments
 
+---
+
 # What we want to get out of this
 
 * Some understanding how the ActiveRecord implementation of
@@ -61,6 +73,8 @@ scope works.
 * When and why to pass blocks into scopes.
 * (Personal goal) structure and formatting of talk for
   content reuse. That is, can this talk be delivered on a Kindle?
+
+---
 
 # Review: `scope` definition
 
@@ -85,11 +99,15 @@ The method definition of scope has 3 parts.
   end
 ~~~~
 
+---
+
 # 3 part definition
 
 1. check for existing scope name
 2. build scope extension if block present
 3. define the scope as a class method on the current ActiveRecord model.
+
+---
 
 # Scary! `dangerous_class_method?`
 
@@ -113,6 +131,8 @@ Reserved words, can't name a scope any of these:
 This presentation has an Appendix, where you can find the definition of
 `dangerous_class_method?`.
 
+---
+
 # Define scope extension
 
 ### (scope def. part 2)
@@ -127,6 +147,8 @@ Apparently, few people have heard of scope extensions, and fewer seem to
 use them.
 
 We'll return to scope extensions later.
+
+---
 
 # Define scope as class method
 
@@ -150,6 +172,8 @@ method body.
 * `body` is the callback passed to the scope definition in the model
 * `extension` handles a block passed to the scope definition in the
   model (we'll look at this in more detail later).
+
+---
 
 # In even more detail...
 
@@ -176,6 +200,7 @@ end
  => "SELECT animals.* FROM animals  WHERE animals.role = 'working'"
 ~~~~
 
+---
 
 # Kindle-sized code snippets
 
@@ -186,6 +211,8 @@ Specifically, can code be discussed on devices as small
 as Kindle?
 
 We won't find out here, but this is step along that path.
+
+---
 
 # Begin at the beginning
 
@@ -212,6 +239,8 @@ But we can write a driver file named `arscope.rb`.
 
 Since we're interested in scopes, which are ActiveRecord methods,
 we'll need some sort of database connection as well.
+
+---
 
 # EZ database connection
 
@@ -243,12 +272,15 @@ Now we load it....
   load './connection.rb'
 ~~~~
 
+---
+
 # Example domain: Farm
 
 ![Farm](/images/farm.jpg)
 
 [Photo credit](https://www.flickr.com/photos/cindy47452/13881944095)
 
+---
 
 # Migrations (farms have animals)
 
@@ -281,6 +313,8 @@ We might add more migrations later, but they won't fit on the slide.
 
 (We could load each migration from its own file...)
 
+---
+
 # And, once again...
 
 ~~~~
@@ -296,6 +330,7 @@ We might add more migrations later, but they won't fit on the slide.
   load './migrations.rb'
 ~~~~
 
+---
 
 # How 'bout a model, then...
 
@@ -309,6 +344,7 @@ class Animal < ActiveRecord::Base
 end
 ~~~~
 
+---
 
 # Yet again...
 
@@ -329,6 +365,8 @@ load './animal.rb'
 From here on out, let's assume we're all smart enough to remember
 to add the new file.
 
+---
+
 # Should scopes be tested?
 
 Depends.
@@ -343,6 +381,8 @@ However, no matter anyone's opinion,
 ### we're testing scopes in this talk,
 
 because it's useful for demonstrating behavior.
+
+---
 
 # And here's how we're testing scopes...
 
@@ -367,6 +407,7 @@ because it's useful for demonstrating behavior.
   end
 ~~~~
 
+---
 
 # Replace scope with class method
 
@@ -382,6 +423,7 @@ end
 
 It's that simple.
 
+---
 
 # Why chaining works
 
@@ -398,6 +440,7 @@ Example: `"Foo".downcase.reverse => "oof"`
 `QueryMethods`, from
 [ActiveRecord::Relation (Arel)](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation/query_methods.rb) return Arel objects.
 
+---
 
 # Some RSpec
 
@@ -405,6 +448,8 @@ Example: `"Foo".downcase.reverse => "oof"`
 * Scope-to-class method chaining
 * Class method-to-scope chaining
 * Class method-to-class method chaining
+
+---
 
 # Scope-to-scope chaining
 
@@ -415,10 +460,13 @@ it "finds the pet cats" do
 end
 ~~~~
 
+---
+
 # Wheezy the Maine Coon
 
 ![Wheezy](/images/maine_coon_wheezy.jpg)
 
+---
 
 # More useful scopes and methods
 
@@ -445,6 +493,7 @@ class Animal < ActiveRecord::Base
   end
 ~~~~
 
+---
 
 # Scope-to-class method chaining
 
@@ -458,6 +507,8 @@ it "finds the pet cats by kind and role" do
 end
 ~~~~
 
+---
+
 # Class method-to-scope chaining
 
 * Class method: `by_role`
@@ -470,6 +521,7 @@ it "finds the pet cats by role and kind" do
 end
 ~~~~
 
+---
 
 # Class method-to-class method chaining
 
@@ -483,11 +535,15 @@ it "finds all the angus" do
 end
 ~~~~
 
+---
+
 # One of the Angus herd...
 
 ![Angus bull](/images/black_angus_bull.jpg)
 
 [Photo credit](https://www.flickr.com/photos/brittgow/4782264442/in/photolist-8hAmBd-fWf4Sm-sBhqy-5NLJ75-df1qdX-9QwH67-fURhtT-5GfGPx-oc1RyS-9m1mgj-dyNvbc-9m1m25-dNsw61-9kXfqR-9kXg3P-nQDLMo-ofDppd-fUR3MY-beB9hM-obrYGd-9m1mCy-cDJdLQ-fa6wzB-9m1mkd-odWovP-5NGpo6-7XVsMj-odYJyu-nWxY11-eXrc1F-eNaDtB-m6JPhL-fTwUP-69MC3M-eXrcEe-eXrFQF-eXrETt-5PyTxq-eXrdnk-9wxgb-4suVzj-eXCGkA-nZvHY1-96VcgL-jneb5P-5v15n6-4sa5qJ-5v15aM-5MPgif-5NGrYx)
+
+---
 
 # Scope extensions
 
@@ -496,14 +552,16 @@ regular basis?
 
 Simple example:
 
-~~~~
+~~~
 @@@ ruby
-
 scope :foo, -> { where(bar: 'baz') } do
   def quux
     'foobar'
   end
 end
+~~~
+
+---
 
 # Debugging scopes
 
@@ -530,6 +588,7 @@ Even the SQL looks somewhat reasonable:
 SELECT "animals".* FROM "animals"  WHERE (1413899468 - Date.now.to_i > max_value)
 ~~~~
 
+---
 
 # Let's see what the database has to say...
 
@@ -545,6 +604,7 @@ You think it's funny now (and it is), but spend a couple of hours at the
 end of the week trying to figure out why your *Rails* application isn't
 working.
 
+---
 
 # REPL is your friend
 
@@ -565,6 +625,8 @@ Failure/Error: expect(Animal.badscope).not_to be_empty
        SQLite3::SQLException: no such column: date.now.to_i: SELECT
 COUNT(*) FROM "animals"  WHERE (1413985311 - date.now.to_i > max_value)
 ~~~~
+
+---
 
 # Testing a scope with RSpec
 
@@ -589,6 +651,8 @@ several programming languages every day.
 The upshot here: when I've been looking at Ruby all day long, sometimes
 shifting gears into SQL doesn't.
 
+---
+
 # How about "AnRel" (Active Non-Relation)
 
 Is there any way to generalize this to non-relational
@@ -601,6 +665,7 @@ Create a wrapper around the query structure of the non-relational
 system, ensure whatever replaces `scope` returns the non-relation
 on every call.
 
+---
 
 # Caveats
 
@@ -614,6 +679,7 @@ As usual, employ (or deploy) at your own risk:
 
 3. ??? You tell me.
 
+---
 
 # Summarizing
 
@@ -640,7 +706,12 @@ for digging deeper:
 * [`dangerous_class_method?`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/attribute_methods.rb#L148), more source.
 * [Abstracting persistence in Rails](https://medium.com/@KamilLelonek/why-is-your-rails-application-still-coupled-to-activerecord-efe34d657c91)
 
+
+---
+
 # Appendix
+
+---
 
 # `dangerous_class_method?`
 
@@ -670,8 +741,8 @@ for digging deeper:
       false
     end
   end
-
 # `all`
+~~~~
 
 ~~~~
 @@@ ruby
@@ -692,6 +763,7 @@ for digging deeper:
   end
 ~~~~
 
+---
 
 # Controlling queries on parameterized scopes
 
@@ -717,6 +789,8 @@ which produces the follow SQL:
 SELECT * FROM animals  WHERE kind = 'cat' AND role = 'pet'
 ~~~~
 
+---
+
 # When parameter isn't `present?`
 
 ~~~~
@@ -725,6 +799,9 @@ SELECT * FROM animals WHERE kind = 'cat' AND role = ''
 
 SELECT * FROM animals  WHERE kind = 'cat' AND role IS NULL
 ~~~~
+
+---
+
 # When `nil` and `blank` matter
 
 From Blogistan, for replacing a scope with a class method,
@@ -751,6 +828,8 @@ def self.by_kind kind
   where(kind: kind) if kind.present? or all
 end
 ~~~~
+
+---
 
 # Extending class methods
 
@@ -786,6 +865,7 @@ module PaginationExtensions
 end
 ~~~~
 
+---
 
 # How to name ActiveRecord scopes
 
