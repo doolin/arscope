@@ -12,8 +12,7 @@ marp: true
 
 It's just part of what I do in my day job.
 
-And, this presentation is largely a result of personal
-investigation to improve my own skills.
+And, this presentation is largely a result of personal investigation to improve my own skills.
 
 ### YMMV, &c.
 
@@ -33,11 +32,9 @@ A necessary first step:
 
 ## change scopes into class methods
 
-Specifically, how much could I leverage Rails patterns
-for NoSQL tools?
+Specifically, how much could I leverage Rails patterns for NoSQL tools?
 
-The answer to that is still open, but there are plenty
-of tasty Rails treats here.
+The answer to that is still open, but there are plenty of tasty Rails treats here.
 
 ---
 
@@ -705,7 +702,7 @@ with query:
 Animal.by_kind('cat').by_role('pet')
 ```
 
-which produces the follow SQL:
+which produces the following SQL:
 
 ```sql
 SELECT * FROM animals  WHERE kind = 'cat' AND role = 'pet'

@@ -105,38 +105,8 @@ module LocalScoper
   end
 end
 
-class Farm < ActiveRecord::Base
-  has_many :animals
-
-  scope :long, -> { where('length > 1000') }
-end
-
-puts 'before loading animal'
-load './lib/animal.rb'
-# load 'lib/animal.rb'
-puts 'after loading animal'
-
-# http://guides.rubyonrails.org/initialization.html
-
-# Assign an object to a has_one association in an existing object,
-# that associated object will be saved.
-# Read from p. 323 in Agile 3rd Edition on CRUD.
-_o1 = Farm.create name: 'farm 1'
-_i1 = Animal.new name: 'animal 1'
-# o1.animals = [i1]
-
-_o2 = Farm.new name: 'farm 2'
-_i2 = Animal.new name: 'animal 2'
-# i2.save
-
-o3 = Farm.new name: 'farm 3'
-o3.save
-
-# Same as scenario 1, using new instead of create
-# Nothing gets saved
-_o4 = Farm.new name: 'farm 4'
-_i4 = Animal.new name: 'animal 5', weight: 42.13
-# o4.animal = i4
+require './lib/animal.rb'
+require './lib/farm.rb'
 
 # ActiveRecord::Base.logger = Logger.new(STDOUT)
 
@@ -149,13 +119,7 @@ end
 describe Animal do
   let(:animal) { Animal.new }
 
-  #   before :all do
-  #     # Nasty kludge. You can do better than this.
-  #     require './seed'
-  #   end
-
-  # before(:all) { require './seed' }
-  # before(:all) { load 'lib/seed' }
+  # This is nasty.
   before(:all) { require_relative '../lib/seed' }
 
   it 'new animal should be valid' do
@@ -171,7 +135,6 @@ describe Animal do
   end
 
   it 'it finds overdue for vet' do
-    # binding.pry
     expect(Animal.needs_vet.count).to eq 4
   end
 
