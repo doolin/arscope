@@ -1,5 +1,6 @@
-# Support for scoping talk.
+# frozen_string_literal: true
 
+# Support for scoping talk.
 class Farm < ActiveRecord::Base
   has_many :animals
 

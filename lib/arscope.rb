@@ -105,8 +105,8 @@ module LocalScoper
   end
 end
 
-require './lib/animal.rb'
-require './lib/farm.rb'
+require './lib/animal'
+require './lib/farm'
 
 # ActiveRecord::Base.logger = Logger.new(STDOUT)
 
