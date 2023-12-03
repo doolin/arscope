@@ -8,28 +8,28 @@
 class Animal < ActiveRecord::Base
   belongs_to :farm
 
-  scope :needs_vet, (-> { where('last_vet < ?', 1.year.ago) })
+  scope :needs_vet, -> { where('last_vet < ?', 1.year.ago) }
 
-  scope :pets, (-> { where(role: 'pet') })
+  scope :pets, -> { where(role: 'pet') }
 
   # scope :bar, -> { where(name: "animal 4") }
   # scope :bar, -> { where(name: "animal 4") }
 
   ##  Why can't we use 'type' here?
   # scope :is, -> (kind) { where(type: kind) }
-  scope :by_kind, (->(kind) { where(kind:) }) do
+  scope :by_kind, ->(kind) { where(kind:) } do
     def work(kind)
       'herd' if kind == 'dog'
     end
   end
 
-  scope :by_name, (->(n) { where(name: n) })
+  scope :by_name, ->(n) { where(name: n) }
 
-  scope :badscope, (-> { where('? - date.now.to_i > max_value', Time.now.utc.to_i) })
+  scope :badscope, -> { where('? - date.now.to_i > max_value', Time.now.utc.to_i) }
 
   # scope :by_breed, -> (breed) { where(breed: breed) if breed.present? }
 
-  scope :yielder, (-> { where(breed: 'persion') }) do
+  scope :yielder, -> { where(breed: 'persion') } do
     def yieldit
       yield
     end

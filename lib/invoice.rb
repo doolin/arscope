@@ -7,8 +7,8 @@
 class Invoice < ActiveRecord::Base
   belongs_to :order
 
-  scope :bar, (-> { where(name: 'Invoice 1') })
-  scope :bar, (-> { where(name: 'Invoice 2') }) do
+  scope :bar, -> { where(name: 'Invoice 1') }
+  scope :bar, -> { where(name: 'Invoice 2') } do
     'foo'
   end
 
