@@ -13,6 +13,7 @@ gem 'rspec-rails'
 gem 'sqlite3'
 # gem 'awesome_print'
 # gem 'pry-nav'
+gem 'debug'
 # gem 'yard'
 # gem 'ap'
 

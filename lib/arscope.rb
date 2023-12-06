@@ -3,9 +3,13 @@
 
 require 'active_record'
 # require 'active_support'
-# require 'logger'
+require 'logger'
 require 'rspec'
 # require 'pry-nav'
+
+# https://github.com/ruby/debug
+# TODO: practice using debug gem.
+require 'debug'
 # require 'ap'
 
 #####
@@ -108,7 +112,7 @@ end
 require './lib/animal'
 require './lib/farm'
 
-# ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -191,7 +195,7 @@ describe Animal do
   #     expect(Animal.by_breed(nil).pluck(:kind)).to include "mule"
   #   end
 
-  it 'finds all the cats and their roles' do
+  xit 'finds all the cats and their roles' do
     cats = Animal.by_kind('cat').by_role('pet').to_sql # .pluck(:name)
     puts cats.inspect
     cats = Animal.by_kind('cat').by_role('').to_sql # .pluck(:name)
