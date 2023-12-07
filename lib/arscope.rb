@@ -112,7 +112,7 @@ end
 require './lib/animal'
 require './lib/farm'
 
-ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger = Logger.new($stdout)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
