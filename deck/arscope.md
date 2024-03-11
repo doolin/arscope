@@ -50,6 +50,7 @@ Two main reasons:
 
 1. Scopes provide a semantically convenient shorthand for SQL statements.
 1. Scopes can be *chained*, tremendously easing the cognitive load of creating the correct SQL for complicated queries.
+1. TODO: Verify. AR preload, includes, eager_load works better with scopes.
 
 ### Basically, scopes allow defining custom database queries and query fragments
 
