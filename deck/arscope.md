@@ -70,7 +70,7 @@ Two main reasons:
 
 # Review: `scope` definition
 
-The method definition of scope has 3 parts.
+The [method definition of scope](https://github.com/rails/rails/blob/main/activerecord/lib/active_record/scoping/named.rb#L154) has 3 parts.
 
 ```ruby
 # activerecord/lib/active_record/scoping/named.rb
@@ -163,7 +163,7 @@ end
 
 ### `all.scoping`
 
-See the [method definition for `scoping`](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/relation.rb#L301) in the Rails source at Github.
+See the [method definition for `scoping`](https://github.com/rails/rails/blob/main/activerecord/lib/active_record/relation.rb#L529) in the Rails source at Github.
 
 ---
 
