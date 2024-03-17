@@ -518,9 +518,9 @@ It's not hard to blunder in scope definitions.
 
 One favorite way of mine is mixing Ruby with SQL.
 
-ActiveRecord is perfectly happy to define perfectly invalid SQL, which leaves debugging up to us Rubyists.
+ActiveRecord is perfectly happy to define perfectly invalid SQL.
 
-Consider the following:
+Consider the following, written late in the afternoon:
 
 ```ruby
   scope :badscope, -> { where("? - Date.now.to_i > max_value", Time.now.utc.to_i) }
