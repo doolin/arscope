@@ -8,6 +8,7 @@ gem 'activerecord'
 # gem 'ransack'
 
 gem 'database_cleaner'
+gem 'rake'
 gem 'rspec'
 gem 'rspec-rails'
 gem 'sqlite3'
